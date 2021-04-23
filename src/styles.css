@@ -1,0 +1,47 @@
+:root {
+    /* Colors: */
+    --negro: #1A2B31;
+    --gris: #8AA2AA;
+    --rojo: #d82121;
+    --blanco: #FFFFFF;
+    /* Font/text values */
+    --unnamed-font-family-nunito-sans: Nunito Sans;
+    --unnamed-font-style-extrabold: 800;
+    --unnamed-font-style-regular: 400;
+    --unnamed-font-size-14: 14px;
+    --unnamed-font-size-16: 16px;
+    --unnamed-font-size-28: 28px;
+    --unnamed-font-size-40: 40px;
+    --unnamed-character-spacing-0: 0px;
+    --unnamed-line-spacing-22: 22px;
+    --unnamed-line-spacing-24: 24px;
+    --unnamed-line-spacing-32: 32px;
+    --unnamed-line-spacing-52: 52px;
+}
+
+/* Character Styles */
+body {
+    font-family: var(--unnamed-font-family-nunito-sans);
+    font-weight: var(--unnamed-font-style-regular);
+    font-size: var(--unnamed-font-size-16);
+    line-height: var(--unnamed-line-spacing-24);
+    letter-spacing: var(--unnamed-character-spacing-0);
+    color: var(--negro);
+}
+
+.navbar {
+    background-color: var(--rojo);
+}
+
+.p-dialog .p-dialog-header {
+    background: var(--rojo) !important;
+    color: #f8f9fa !important;
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-icon{
+    color: #f8f9fa !important;    
+}
+
+.p-confirm-dialog .p-dialog-content {
+    padding: 5%;
+}

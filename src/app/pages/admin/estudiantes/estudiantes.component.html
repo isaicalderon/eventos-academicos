@@ -1,0 +1,150 @@
+<app-navbar-admin></app-navbar-admin>
+<p-toast></p-toast>
+
+<div class="container-fluid">
+    <section class="p-3 my-container">
+        <h1 class="text-center">Estudiantes</h1>
+        <div class="mb-4">
+
+            <!--Boton de registro-->
+            <button type="button" class="btn btn-primary" (click)="fDisplayDialogAdd()" style="margin-right: 10px;">
+                <i class="fa fa-plus"></i> Nuevo
+            </button>
+
+        </div>
+
+        <!--tabla de contenido-->
+        <p-table #dt1 [value]="estudiantesList" dataKey="idestudiantes" [paginator]="true" [rows]="10"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+            [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-sm p-datatable-responsive-demo"
+            [globalFilterFields]="['nombreevento','descripcionevento','eventosmaxparticipantes','fechainicioevento','fechafinEvento']">
+            <ng-template pTemplate="header">
+                <tr>
+                    <!-- <th pSortableColumn="ideventos">Id <p-sortIcon field="ideventos"></p-sortIcon></th> -->
+                    <th pSortableColumn="matriculaestudiantes">Matricula <p-sortIcon field="matriculaestudiantes">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="nombreestudiantes">Nombre <p-sortIcon field="nombreestudiantes"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="apellidosestudiante">Apellido <p-sortIcon field="apellidosestudiante">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="correoestudiantes">Correo <p-sortIcon field="correoestudiantes"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="idpaquetes">Paquete <p-sortIcon field="idpaquetes"></p-sortIcon>
+                    </th>
+                    <th style="width: 120px;">Opciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex">
+                    <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                        class="p-button-success p-mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+                    <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                        class="p-button-warning p-mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+                    <span class="p-input-icon-left p-ml-auto">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Búsqueda general" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="body" let-estudiante>
+                <tr>
+                    <td>{{estudiante.matriculaestudiantes}}</td>
+                    <td>{{estudiante.nombreestudiantes}}</td>
+                    <td>{{estudiante.apellidosestudiante}}</td>
+                    <td>{{estudiante.correoestudiantes}}</td>
+                    <td>{{estudiante.idpaquetes}}</td>
+                    <td>
+                        <button type="button" pButton class="p-button-rounded p-button-info"
+                            (click)="fDisplayDialogEdit(estudiante)" icon="pi pi-pencil"></button>
+                        <button type="button" pButton class="p-button-rounded p-button-warning"
+                            (click)="confirmDelete(estudiante)" icon=" pi pi-trash"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <p-dialog header="Nuevo Estudiante" modal="true" [(visible)]="displayDialogAdd"
+            [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '40vw'}">
+
+            <div class="p-fluid pt-3">
+                <div class="p-field">
+                    <label for="mat">Matricula estudiante</label>
+                    <input id="mat" type="text" pInputText [(ngModel)]="estudianteNew.matriculaestudiantes"
+                        maxlength="8">
+                </div>
+                <div class="p-field">
+                    <label for="nombre">Nombre estudiante</label>
+                    <input id="nombre" type="text" pInputText [(ngModel)]="estudianteNew.nombreestudiantes">
+                </div>
+                <div class="p-field">
+                    <label for="apellidos">Apellidos estudiante</label>
+                    <input id="apellidos" type="text" pInputText [(ngModel)]="estudianteNew.apellidosestudiante">
+                </div>
+                <div class="p-field">
+                    <label for="correo">Correo electrónico</label>
+                    <input id="correo" type="email" pInputText [(ngModel)]="estudianteNew.correoestudiantes">
+                </div>
+                <div class="p-field">
+                    <label for="paquete">Paquete</label>
+                    <input id="paquete" type="text" pInputText [(ngModel)]="estudianteNew.idpaquetes">
+                </div>
+                <div class="p-field">
+                    <label for="gafete">Gafete</label>
+                    <input id="gafete" type="text" pInputText [(ngModel)]="estudianteNew.idgafetes">
+                </div>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton icon="pi pi-check" (click)="guardarEstudiante()" label="Aceptar"
+                    styleClass="p-button-text"></button>
+            </ng-template>
+        </p-dialog>
+
+        <!-- Editar estudiante -->
+        <p-dialog header="Editar Estudiante" modal="true" [(visible)]="displayDialogEdit"
+            [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '40vw'}">
+
+            <div class="p-fluid pt-3">
+                <div class="p-field">
+                    <label for="mat">Matricula estudiante</label>
+                    <input id="mat" type="text" pInputText [(ngModel)]="estudianteSeleccionado.matriculaestudiantes"
+                        maxlength="8">
+                </div>
+                <div class="p-field">
+                    <label for="nombre">Nombre estudiante</label>
+                    <input id="nombre" type="text" pInputText [(ngModel)]="estudianteSeleccionado.nombreestudiantes">
+                </div>
+                <div class="p-field">
+                    <label for="apellidos">Apellidos estudiante</label>
+                    <input id="apellidos" type="text" pInputText
+                        [(ngModel)]="estudianteSeleccionado.apellidosestudiante">
+                </div>
+                <div class="p-field">
+                    <label for="correo">Correo electrónico</label>
+                    <input id="correo" type="email" pInputText [(ngModel)]="estudianteSeleccionado.correoestudiantes">
+                </div>
+                <div class="p-field">
+                    <label for="paquete">Paquete</label>
+                    <input id="paquete" type="text" pInputText [(ngModel)]="estudianteSeleccionado.idpaquetes">
+                </div>
+                <div class="p-field">
+                    <label for="gafete">Gafete</label>
+                    <input id="gafete" type="text" pInputText [(ngModel)]="estudianteSeleccionado.idgafetes">
+                </div>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton icon="pi pi-check" (click)="editarEstudiante()" label="Aceptar"
+                    styleClass="p-button-text"></button>
+            </ng-template>
+        </p-dialog>
+
+    </section>
+
+</div>
+
+
+<!-- Dialogo de confirmación -->
+<p-confirmDialog class="p-5" header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>

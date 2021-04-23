@@ -1,0 +1,163 @@
+<app-navbar-admin></app-navbar-admin>
+<p-toast></p-toast>
+
+<div class="container-fluid">
+    <section class="p-3 my-container">
+
+        <h1 class="text-center">Eventos</h1>
+
+        <div class="mb-4">
+            <!--Boton de registro-->
+            <button type="button" class="btn btn-primary" (click)="fDisplayCreateDialog()" style="margin-right: 10px;">
+                <i class="fa fa-plus"></i> Nuevo
+            </button>
+        </div>
+
+        <!--tabla de contenido-->
+        <p-table #dt1 [value]="eventosList" dataKey="ideventos" styleClass="p-datatable-sm p-datatable-responsive-demo"
+            [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+            [rowsPerPageOptions]="[10,25,50]"
+            [globalFilterFields]="['nombreevento','descripcionevento','eventosmaxparticipantes','fechainicioevento','fechafinEvento']">
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex">
+                    <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                        class="p-button-success p-mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+                    <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                        class="p-button-warning p-mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+                    <span class="p-input-icon-left p-ml-auto">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Búsqueda general" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <!-- <th pSortableColumn="ideventos">Id <p-sortIcon field="ideventos"></p-sortIcon></th> -->
+                    <th pSortableColumn="nombreevento">Nombre <p-sortIcon field="nombreevento"></p-sortIcon>
+                    </th>
+                    <th style="width: 500px;" pSortableColumn="descripcionevento">Descripción <p-sortIcon
+                            field="descripcionevento">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="eventosmaxparticipantes">Máx. participantes <p-sortIcon
+                            field="eventosmaxparticipantes"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="fechainicioevento">Fecha inicio <p-sortIcon field="fechainicioevento">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="fechafinEvento">Fecha final <p-sortIcon field="fechafinEvento"></p-sortIcon>
+                    </th>
+                    <th>Estado</th>
+                    <th style="width: 120px;">Opciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-evento>
+                <tr>
+                    <!-- <td>{{evento.ideventos}}</td> -->
+                    <td>{{evento.nombreevento}}</td>
+                    <td>{{evento.descripcionevento}}</td>
+                    <td>{{evento.eventosmaxparticipantes}}</td>
+                    <td>{{formatDate(evento.fechainicioevento)}}
+                    </td>
+                    <td>{{formatDate(evento.fechafinEvento)}}</td>
+
+                    <td>activo</td>
+                    <td>
+                        <button type="button" class="p-button-rounded p-button-info" pButton
+                            (click)="fDisplayEditDialog(evento)" icon="pi pi-pencil">
+                        </button>
+                        
+                        <button type="button" class="p-button-rounded p-button-warning" pButton
+                            (click)="confirmDelete(evento)" icon="pi pi-trash">
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </section>
+
+    <!-- Dialogo crear evento -->
+    <p-dialog header="Registrar Evento" [(visible)]="displayCreateDialog" [modal]="true" [style]="{width: '40vw'}">
+        <div class="p-fluid p-2 pt-3">
+            <div class="p-field">
+                <label for="">Nombre del evento</label>
+                <input type="text" placeholder="Nombre del evento" pInputText [(ngModel)]="eventoNew.nombreevento">
+            </div>
+
+            <div class="p-field">
+                <label for="">Descripción</label>
+                <textarea placeholder="Descripción" pInputTextarea [(ngModel)]="eventoNew.descripcionevento" [rows]="2"
+                    [cols]="10"></textarea>
+            </div>
+
+            <div class="p-field">
+                <label for="">Maximo de participantes</label>
+                <input type="text" pInputText placeholder="cantidad" [(ngModel)]="eventoNew.eventosmaxparticipantes">
+            </div>
+
+            <!--Fecha de inicio-->
+            <div class="p-field">
+                <label for="">Fecha inicio</label>
+                <p-calendar appendTo="body" [(ngModel)]="eventoNew.fechainicioevento" [showTime]="true" [locale]="es"
+                    hourFormat="24" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+
+            <!--Fecha final-->
+            <div class="p-field">
+                <label for="">Fecha final</label>
+                <p-calendar appendTo="body" [(ngModel)]="eventoNew.fechafinEvento" [showTime]="true" [locale]="es"
+                    hourFormat="24" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+        </div>
+        
+        <ng-template pTemplate="footer">
+            <p-button icon="pi pi-check" (click)="guardarEvento()" label="Guardar" styleClass="p-button-primary">
+            </p-button>
+        </ng-template>
+    </p-dialog>
+
+    <!-- Dialogo editar evento -->
+    <p-dialog header="Editar Evento" [(visible)]="displayEditDialog" [modal]="true" [style]="{width: '40vw'}">
+        <div class="p-fluid p-2 pt-3">
+            <div class="p-field">
+                <label for="">Nombre del evento</label>
+                <input type="text" placeholder="Nombre del evento" pInputText
+                    [(ngModel)]="eventoSeleccionado.nombreevento">
+            </div>
+
+            <div class="p-field">
+                <label for="">Descripción</label>
+                <textarea placeholder="Descripción" pInputTextarea [(ngModel)]="eventoSeleccionado.descripcionevento"
+                    [rows]="2" [cols]="10"></textarea>
+            </div>
+
+            <div class="p-field">
+                <label for="">Maximo de participantes</label>
+                <input type="text" pInputText placeholder="cantidad"
+                    [(ngModel)]="eventoSeleccionado.eventosmaxparticipantes">
+            </div>
+
+            <!--Fecha de inicio-->
+            <div class="p-field">
+                <label for="">Fecha inicio</label>
+                <p-calendar appendTo="body" [(ngModel)]="fecha1" [showTime]="true"></p-calendar>
+            </div>
+
+            <!--Fecha final-->
+            <div class="p-field">
+                <label for="">Fecha final</label>
+                <p-calendar appendTo="body" [(ngModel)]="fecha2" [showTime]="true"></p-calendar>
+            </div>
+        </div>
+
+        <ng-template pTemplate="footer">
+            <p-button icon="pi pi-check" (click)="editarEvento()" label="Editar" styleClass="p-button-primary">
+            </p-button>
+        </ng-template>
+    </p-dialog>
+</div>
+
+<!-- Dialogo de confirmación -->
+<p-confirmDialog class="p-5" header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>
