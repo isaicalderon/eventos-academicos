@@ -7,6 +7,7 @@ import { EstudiantesComponent } from './pages/admin/estudiantes/estudiantes.comp
 import { TalleresComponent } from './pages/admin/talleres/talleres.component';
 import { ConferenciasComponent } from './pages/admin/conferencias/conferencias.component';
 import { ConferencistaComponent } from './pages/admin/conferencista/conferencista.component';
+import { PaquetesComponent } from './pages/admin/paquetes/paquetes.component';
 
 const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
     { path: 'admin/talleres', component: TalleresComponent, canActivate: [AuthGuard] },
     { path: 'admin/conferencias', component: ConferenciasComponent, canActivate: [AuthGuard] },
     { path: 'admin/conferencista', component: ConferencistaComponent, canActivate: [AuthGuard] },
+    { path: 'admin/paquetes', component: PaquetesComponent, canActivate: [AuthGuard] },
 
     { path: '**', pathMatch: 'full', redirectTo: 'home' },
 ];

@@ -30,9 +30,9 @@ export class TalleresComponent implements OnInit {
 
     constructor(
         private messageService: MessageService,
+        private confirmationService: ConfirmationService,
         private talleresService: TalleresService,
         private eventosService: EventosService,
-        private confirmationService: ConfirmationService,
     ) { }
 
     ngOnInit(): void {
