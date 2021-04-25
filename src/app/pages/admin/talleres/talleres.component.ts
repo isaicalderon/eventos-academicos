@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Eventos } from 'src/app/models/Eventos';
 import { Talleres } from 'src/app/models/Talleres';
@@ -14,9 +15,12 @@ import { TalleresService } from 'src/app/services/talleres.service';
 export class TalleresComponent implements OnInit {
 
     displayCreateDialog: boolean = false;
+    displayDialogEdit: boolean = false;
 
     talleresList: Talleres[];
     tallerNew: Talleres = new Talleres();
+    tallerSeleccionado: Talleres = new Talleres();
+
 
     eventosList: Eventos[];
     eventoSeleccionado: Eventos;
@@ -51,6 +55,10 @@ export class TalleresComponent implements OnInit {
     fDisplayCreateDialog(): void {
         this.displayCreateDialog = !this.displayCreateDialog;
     }
+    fDisplayDialogEdit(taller) {
+        this.tallerSeleccionado = taller;
+        this.displayDialogEdit = !this.displayDialogEdit;
+    }
 
     guardarTaller() {
         try {
@@ -68,6 +76,33 @@ export class TalleresComponent implements OnInit {
             );
         } catch (error) {
             this.showMensaje('warn', 'Alerta', 'No se pudo guardar el Taller, es posible que falte un campo por llenar');
+        }
+    }
+
+    editarTaller() {
+        try {
+
+            /* código para fixear la horá porque se buggea al subir y se suman 7 horas más */
+            // Sí la fecha se registrá diferente (osea bien) comentar estas lineas de código 
+            let hourFix = this.tallerSeleccionado.fechainiciotaller.getHours() - 7;
+            this.tallerSeleccionado.fechainiciotaller.setHours(hourFix);
+            /* fin fix */
+
+            this.tallerSeleccionado.idevento = this.eventoSeleccionado.ideventos;
+
+            this.talleresService.editarTaller(this.tallerSeleccionado).subscribe(
+                res => {
+                    this.showMensaje('info', 'Alerta', 'Se editó correctamente');
+                    this.talleresService.obtenerTalleres().then(res => this.talleresList = res);
+                    this.fDisplayDialogEdit(null);
+                    this.tallerSeleccionado = new Talleres();
+                },
+                err => {
+                    this.showMensaje('error', 'Alerta', 'Ocurrio un error al editar');
+                }
+            );
+        } catch (error) {
+            this.showMensaje('warn', 'Alerta', 'Es posible que falte un campo');
         }
     }
 
@@ -103,7 +138,7 @@ export class TalleresComponent implements OnInit {
 
     confirmDelete(taller: any) {
         this.confirmationService.confirm({
-            message: `Los datos no podrán ser restaurados ¿Desea Eliminar al taller: ${taller.nombretalleres} ?`,
+            message: `Los datos no podrán ser restaurados ¿Desea eliminar el taller: ${taller.nombretalleres} ?`,
             acceptLabel: 'Sí',
             acceptButtonStyleClass: 'p-button-primary',
             rejectButtonStyleClass: 'p-button-secondary',
@@ -115,6 +150,11 @@ export class TalleresComponent implements OnInit {
                 });
             }
         });
+    }
+
+    formatDate(date) {
+        moment.locale('es');
+        return moment(date).format('h:mm a');
     }
 
     showMensaje(severity, summary, details) {

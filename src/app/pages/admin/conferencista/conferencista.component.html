@@ -1,0 +1,166 @@
+<app-navbar-admin></app-navbar-admin>
+<p-toast></p-toast>
+
+
+<section class="p-3 my-container">
+
+    <h1 class="text-center">Conferencistas</h1>
+
+    <div class="mb-3">
+        <!--Boton de registro-->
+        <button type="button" class="btn btn-primary" (click)="fDisplayDialogAdd()">
+            Nuevo
+        </button>
+    </div>
+
+    <p-table #dt1 [value]="conferencistasList" dataKey="idconferencista"
+        styleClass="p-datatable-sm p-datatable-responsive-demo" [paginator]="true" [rows]="10"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]"
+        [globalFilterFields]="['conferencistanombre','conferencistacorreo','conferencistatelefono','conferencistaprofesion','conferencistaedad','conferencistasexo']">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex">
+                <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                    class="p-button-success p-mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+                <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                    class="p-button-warning p-mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+                <span class="p-input-icon-left p-ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Búsqueda general" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="conferencistanombre"> Nombre
+                    <p-sortIcon field="conferencistanombre"></p-sortIcon>
+                </th>
+                <th pSortableColumn="conferencistacorreo"> Correo
+                    <p-sortIcon field="conferencistacorreo"></p-sortIcon>
+                </th>
+                <th pSortableColumn="conferencistatelefono"> Telefono
+                    <p-sortIcon field="conferencistatelefono"></p-sortIcon>
+                </th>
+                <th pSortableColumn="conferencistaprofesion"> Profesión
+                    <p-sortIcon field="conferencistaprofesion"></p-sortIcon>
+                </th>
+                <th pSortableColumn="conferencistaedad"> Edad
+                    <p-sortIcon field="conferencistaedad"></p-sortIcon>
+                </th>
+                <th pSortableColumn="conferencistasexo"> Sexo
+                    <p-sortIcon field="conferencistasexo"></p-sortIcon>
+                </th>
+                <th style="width: 120px;">Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-confe>
+            <tr>
+                <td>{{confe.conferencistanombre}}</td>
+                <td>{{confe.conferencistacorreo}}</td>
+                <td>{{confe.conferencistatelefono}}</td>
+                <td>{{confe.conferencistaprofesion}}</td>
+                <td>{{confe.conferencistaedad}}</td>
+                <td>{{confe.conferencistasexo}}</td>
+                <td>
+                    <button pButton class="p-button-rounded" icon="pi pi-pencil"
+                        (click)="fDisplayDialogEdit(confe)"></button>
+                    <button pButton class="p-button-rounded p-button-warning" icon="pi pi-trash"
+                        (click)="confirmDelete(confe)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+
+</section>
+
+
+<p-dialog header="Registrar Conferencista" [(visible)]="displayDialogAdd" [modal]="true" [style]="{width: '40vw'}">
+    <div class="p-fluid p-2 pt-3">
+        <div class="p-field">
+            <label for="">Nombre conferencista</label>
+            <input type="text" pInputText [(ngModel)]="conferencistaNew.conferencistanombre">
+        </div>
+        <div class="p-field">
+            <label for="">Correo conferencista</label>
+            <input type="text" pInputText [(ngModel)]="conferencistaNew.conferencistacorreo">
+        </div>
+        <div class="p-field">
+            <label for="">Edad conferencista</label>
+            <p-inputNumber [(ngModel)]="conferencistaNew.conferencistaedad" mode="decimal" [showButtons]="true"
+                [min]="0" [max]="100">
+            </p-inputNumber>
+        </div>
+        <div class="p-field">
+            <label for="">Sexo conferencista</label>
+            <p-dropdown [options]="sexoList" [(ngModel)]="conferencistaNew.conferencistasexo" optionLabel="value"
+                placeholder="Selecciona un valor">
+            </p-dropdown>
+        </div>
+        <div class="p-field">
+            <label for="">Profesión conferencista</label>
+            <input type="text" pInputText [(ngModel)]="conferencistaNew.conferencistaprofesion">
+        </div>
+
+        <div class="p-field">
+            <label for="">Telefono conferencista</label>
+            <p-inputMask mask="(999) 999-9999" [(ngModel)]="conferencistaNew.conferencistatelefono"
+                placeholder="(999) 999-9999"></p-inputMask>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" label="Cerrar" (click)="fDisplayDialogAdd()" styleClass="p-button-secondary">
+        </p-button>
+        <p-button icon="pi pi-check" label="Guardar" (click)="guardarConferencista()" styleClass="p-button-primary">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Editar Conferencista" [(visible)]="displayDialogEdit" [modal]="true" [style]="{width: '40vw'}">
+    <div class="p-fluid p-2 pt-3">
+        <div class="p-field">
+            <label for="">Nombre conferencista</label>
+            <input type="text" pInputText [(ngModel)]="conferencistaSeleccionado.conferencistanombre">
+        </div>
+        <div class="p-field">
+            <label for="">Correo conferencista</label>
+            <input type="text" pInputText [(ngModel)]="conferencistaSeleccionado.conferencistacorreo">
+        </div>
+        <div class="p-field">
+            <label for="">Edad conferencista</label>
+            <p-inputNumber [(ngModel)]="conferencistaSeleccionado.conferencistaedad" mode="decimal" [showButtons]="true"
+                [min]="0" [max]="100">
+            </p-inputNumber>
+        </div>
+        <div class="p-field">
+            <label for="">Sexo conferencista</label>
+            <p-dropdown [options]="sexoList" [(ngModel)]="conferencistaSeleccionado.conferencistasexo"
+                optionLabel="value" placeholder="Selecciona un valor">
+            </p-dropdown>
+        </div>
+        <div class="p-field">
+            <label for="">Profesión conferencista</label>
+            <input type="text" pInputText [(ngModel)]="conferencistaSeleccionado.conferencistaprofesion">
+        </div>
+
+        <div class="p-field">
+            <label for="">Telefono conferencista</label>
+            <p-inputMask mask="(999) 999-9999" [(ngModel)]="conferencistaSeleccionado.conferencistatelefono"
+                placeholder="(999) 999-9999"></p-inputMask>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" label="Cerrar" (click)="displayDialogEdit = false" styleClass="p-button-secondary">
+        </p-button>
+        <p-button icon="pi pi-check" label="Guardar" (click)="editarConferencista()" styleClass="p-button-primary">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+
+<!-- Dialogo de confirmación -->
+<p-confirmDialog class="p-5" header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>

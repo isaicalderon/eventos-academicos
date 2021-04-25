@@ -38,25 +38,29 @@
             <ng-template pTemplate="header">
                 <tr>
                     <!-- <th pSortableColumn="ideventos">Id <p-sortIcon field="ideventos"></p-sortIcon></th> -->
-                    <th pSortableColumn="nombretalleres">Nombre Taller <p-sortIcon field="nombretalleres"></p-sortIcon>
+                    <th pSortableColumn="nombretalleres">Nombre Taller
+                        <p-sortIcon field="nombretalleres"></p-sortIcon>
                     </th>
-                    <th style="width: 400px;" pSortableColumn="descripciontaller">Descripción Taller<p-sortIcon
-                            field="descripciontaller">
-                        </p-sortIcon>
+                    <th style="width: 400px;" pSortableColumn="descripciontaller">Descripción Taller
+                        <p-sortIcon field="descripciontaller"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="requerimientostaller">Requerimientos Taller <p-sortIcon
-                            field="requerimientostaller"></p-sortIcon>
+                    <th pSortableColumn="requerimientostaller">Requerimientos Taller
+                        <p-sortIcon field="requerimientostaller"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="tallermaxparticipante">Máx. Participantes <p-sortIcon
-                            field="tallermaxparticipante"></p-sortIcon>
-                    </th>
-
-                    <th pSortableColumn="tallerlugar">Lugar Taller <p-sortIcon field="tallerlugar">
-                        </p-sortIcon>
+                    <th pSortableColumn="tallermaxparticipante">Máx. Participantes
+                        <p-sortIcon field="tallermaxparticipante"></p-sortIcon>
                     </th>
 
-                    <th pSortableColumn="nombreevento">Nombre evento <p-sortIcon field="nombreevento">
-                        </p-sortIcon>
+                    <th pSortableColumn="tallerlugar">Lugar Taller
+                        <p-sortIcon field="tallerlugar"></p-sortIcon>
+                    </th>
+
+                    <th pSortableColumn="fechainiciotaller"> Hora taller
+                        <p-sortIcon field="fechainiciotaller"></p-sortIcon>
+                    </th>
+
+                    <th pSortableColumn="nombreevento">Nombre evento
+                        <p-sortIcon field="nombreevento"></p-sortIcon>
                     </th>
 
                     <th style="width: 120px;">Opciones</th>
@@ -68,17 +72,17 @@
                     <td>{{taller.nombretalleres}}</td>
                     <td>{{taller.descripciontaller}}</td>
                     <td>{{taller.requerimientostaller}}</td>
-                    <td style="text-align: right;">{{taller.tallermaxparticipante}}</td>
+                    <td>{{taller.tallermaxparticipante}}</td>
                     <td>{{taller.tallerlugar}}</td>
+                    <td>{{formatDate(taller.fechainiciotaller)}}</td>
                     <td>{{taller.nombreevento}}</td>
-
                     <td>
                         <button type="button" class="p-button-rounded p-button-info" pButton
-                            (click)="fDisplayEditDialog(evento)" icon="pi pi-pencil">
+                            (click)="fDisplayDialogEdit(taller)" icon="pi pi-pencil">
                         </button>
 
                         <button type="button" class="p-button-rounded p-button-warning" pButton
-                            (click)="confirmDelete(evento)" icon="pi pi-trash">
+                            (click)="confirmDelete(taller)" icon="pi pi-trash">
                         </button>
                     </td>
                 </tr>
@@ -136,6 +140,59 @@
         <p-button icon="pi pi-check" label="Cerrar" (click)="fDisplayCreateDialog()" styleClass="p-button-secondary">
         </p-button>
         <p-button icon="pi pi-check" label="Guardar" (click)="guardarTaller()" styleClass="p-button-primary">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Editar Taller" [(visible)]="displayDialogEdit" [modal]="true" [style]="{width: '40vw'}">
+    <div class="p-fluid p-2 pt-3">
+        <div class="p-field">
+            <label for="">Nombre del taller</label>
+            <input type="text" pInputText [(ngModel)]="tallerSeleccionado.nombretalleres">
+        </div>
+
+        <div class="p-field">
+            <label for="">Descripción taller</label>
+            <textarea type="text" pInputTextarea [(ngModel)]="tallerSeleccionado.descripciontaller" [rows]="2"
+                [cols]="10"></textarea>
+        </div>
+
+        <div class="p-field">
+            <label for="">Requerimientos taller</label>
+            <textarea type="text" pInputTextarea [(ngModel)]="tallerSeleccionado.requerimientostaller" [rows]="2"
+                [cols]="10"></textarea>
+        </div>
+
+        <div class="p-field">
+            <label for="">Máx. Participantes</label>
+            <input type="text" pInputText [(ngModel)]="tallerSeleccionado.tallermaxparticipante">
+        </div>
+
+        <div class="p-field">
+            <label for="">Lugar taller</label>
+            <input type="text" pInputText [(ngModel)]="tallerSeleccionado.tallerlugar">
+        </div>
+
+        <div class="p-field">
+            <label for="">Hora taller</label>
+            <p-calendar appendTo="body" [(ngModel)]="tallerSeleccionado.fechainiciotaller" [timeOnly]="true"
+                placeholder="Time"
+                hourFormat="12">
+            </p-calendar>
+        </div>
+
+        <div class="p-field">
+            <label for="">Evento</label>
+            <p-dropdown appendTo="body" [options]="eventosList" [(ngModel)]="eventoSeleccionado"
+                optionLabel="nombreevento" placeholder="Selecciona un evento">
+            </p-dropdown>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" label="Cerrar" (click)="displayDialogEdit = false" styleClass="p-button-secondary">
+        </p-button>
+        <p-button icon="pi pi-check" label="Guardar" (click)="editarTaller()" styleClass="p-button-primary">
         </p-button>
     </ng-template>
 </p-dialog>

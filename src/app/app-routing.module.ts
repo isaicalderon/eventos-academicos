@@ -5,13 +5,17 @@ import { EventosadminComponent } from './pages/admin/eventosadmin/eventosadmin.c
 import { AuthGuard } from './auth.guard';
 import { EstudiantesComponent } from './pages/admin/estudiantes/estudiantes.component';
 import { TalleresComponent } from './pages/admin/talleres/talleres.component';
+import { ConferenciasComponent } from './pages/admin/conferencias/conferencias.component';
+import { ConferencistaComponent } from './pages/admin/conferencista/conferencista.component';
 
 const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'admin/eventos', component: EventosadminComponent, canActivate: [AuthGuard] },
     { path: 'admin/estudiantes', component: EstudiantesComponent, canActivate: [AuthGuard] },
     { path: 'admin/talleres', component: TalleresComponent, canActivate: [AuthGuard] },
-    
+    { path: 'admin/conferencias', component: ConferenciasComponent, canActivate: [AuthGuard] },
+    { path: 'admin/conferencista', component: ConferencistaComponent, canActivate: [AuthGuard] },
+
     { path: '**', pathMatch: 'full', redirectTo: 'home' },
 ];
 

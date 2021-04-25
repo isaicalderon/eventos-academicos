@@ -1,0 +1,215 @@
+<app-navbar-admin></app-navbar-admin>
+<p-toast></p-toast>
+
+<section class="p-3 my-container">
+    <h1 class="text-center">Conferencias</h1>
+
+    <!--Boton de registro-->
+    <div class="mb-3">
+        <button type="button" class="btn btn-primary" (click)="fDisplayDialogAdd()">
+            Nuevo
+        </button>
+    </div>
+
+    <!--tabla de contenido-->
+    <p-table [value]="conferenciasList">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="nombreconferencia"> Nombre Conferencia
+                    <p-sortIcon field="nombreconferencia"></p-sortIcon>
+                </th>
+                <th pSortableColumn="descripcionconferencia"> Descripción Conferencia
+                    <p-sortIcon field="descripcionconferencia"></p-sortIcon>
+                </th>
+                <th pSortableColumn="temarioconferencia"> Temario Conferencia
+                    <p-sortIcon field="temarioconferencia"></p-sortIcon>
+                </th>
+                <th pSortableColumn="conferenciamaxparticipante"> Máx. Participantes
+                    <p-sortIcon field="conferenciamaxparticipante"></p-sortIcon>
+                </th>
+                <th pSortableColumn="requerimientosconferencia"> Requerimientos
+                    <p-sortIcon field="requerimientosconferencia"></p-sortIcon>
+                </th>
+                <th pSortableColumn="fechainicioconferencia"> Fecha Conferencia
+                    <p-sortIcon field="fechainicioconferencia"></p-sortIcon>
+                </th>
+                <th pSortableColumn="conferencialugar"> Lugar Conferencia
+                    <p-sortIcon field="conferencialugar"></p-sortIcon>
+                </th>
+                <th pSortableColumn="nombreevento"> Evento
+                    <p-sortIcon field="nombreevento"></p-sortIcon>
+                </th>
+                <th pSortableColumn="conferencistanombre"> Conferencista
+                    <p-sortIcon field="conferencistanombre"></p-sortIcon>
+                </th>
+                <th style="width: 120px;">Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-confe>
+            <tr>
+                <td>{{confe.nombreconferencia}}</td>
+                <td>{{confe.descripcionconferencia}}</td>
+                <td>{{confe.temarioconferencia}}</td>
+                <td>{{confe.conferenciamaxparticipante}}</td>
+                <td>{{confe.requerimientosconferencia}}</td>
+                <td>{{formatDate(confe.fechainicioconferencia)}}</td>
+                <td>{{confe.conferencialugar}}</td>
+                <td>{{confe.nombreevento}}</td>
+                <td>{{confe.conferencistanombre}}</td>
+                <td>
+                    <button pButton class="p-button-rounded" icon="pi pi-pencil"
+                        (click)="fDisplayDialogEdit(confe)"></button>
+                    <button pButton class="p-button-rounded p-button-warning" icon="pi pi-trash"
+                        (click)="confirmDelete(confe)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</section>
+
+
+<p-dialog header="Registrar Conferencia" [(visible)]="displayDialogAdd" [modal]="true" [style]="{width: '60vw'}">
+    <div class="p-fluid p-2 pt-3">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Evento</label>
+                    <p-dropdown appendTo="body" [options]="eventosList" [(ngModel)]="eventoSeleccionado"
+                        optionLabel="nombreevento" placeholder="Selecciona un evento">
+                    </p-dropdown>
+                </div>
+
+                <div class="p-field">
+                    <label for="">Conferencista</label>
+                    <p-dropdown appendTo="body" [options]="conferencistasList" [(ngModel)]="conferencistaSeleccionado"
+                        optionLabel="conferencistanombre" placeholder="Selecciona un conferencista">
+                    </p-dropdown>
+                </div>
+                <div class="p-field">
+                    <label for="">Nombre Conferencia</label>
+                    <input type="text" pInputText [(ngModel)]="conferenciaNew.nombreconferencia">
+                </div>
+
+                <div class="p-field">
+                    <label for="">Descripción conferencia</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="conferenciaNew.descripcionconferencia" row="2"
+                        cols="20"></textarea>
+                </div>
+                <div class="p-field">
+                    <label for="">Temario conferencia</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="conferenciaNew.temarioconferencia" row="2"
+                        cols="20"></textarea>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Fecha conferencia</label>
+                    <p-calendar appendTo="body" [(ngModel)]="conferenciaNew.fechainicioconferencia" [showTime]="true"
+                        hourFormat="24" dateFormat="dd/mm/yy"></p-calendar>
+                </div>
+
+                <div class="p-field">
+                    <label for="">Requerimientos conferencia</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="conferenciaNew.requerimientosconferencia" row="2"
+                        cols="20"></textarea>
+                </div>
+
+                <div class="p-field">
+                    <label for="">Máx. participantes</label>
+                    <p-inputNumber [(ngModel)]="conferenciaNew.conferenciamaxparticipante" mode="decimal"
+                        [showButtons]="true" [min]="0" [max]="100">
+                    </p-inputNumber>
+                </div>
+
+                <div class="p-field">
+                    <label for="">Lugar</label>
+                    <input type="text" pInputText [(ngModel)]="conferenciaNew.conferencialugar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" label="Cerrar" (click)="fDisplayDialogAdd()" styleClass="p-button-secondary">
+        </p-button>
+        <p-button icon="pi pi-check" label="Guardar" (click)="guardarConferencia()" styleClass="p-button-primary">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Editar Conferencia" [(visible)]="displayDialogEdit" [modal]="true" [style]="{width: '60vw'}">
+    <div class="p-fluid p-2 pt-3">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Evento</label>
+                    <p-dropdown appendTo="body" [options]="eventosList" [(ngModel)]="eventoSeleccionado"
+                        optionLabel="nombreevento" placeholder="Selecciona un evento">
+                    </p-dropdown>
+                </div>
+
+                <div class="p-field">
+                    <label for="">Conferencista</label>
+                    <p-dropdown appendTo="body" [options]="conferencistasList" [(ngModel)]="conferencistaSeleccionado"
+                        optionLabel="conferencistanombre" placeholder="Selecciona un conferencista">
+                    </p-dropdown>
+                </div>
+                <div class="p-field">
+                    <label for="">Nombre Conferencia</label>
+                    <input type="text" pInputText [(ngModel)]="conferenciaSeleccionada.nombreconferencia">
+                </div>
+
+                <div class="p-field">
+                    <label for="">Descripción conferencia</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="conferenciaSeleccionada.descripcionconferencia"
+                        row="2" cols="20"></textarea>
+                </div>
+                <div class="p-field">
+                    <label for="">Temario conferencia</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="conferenciaSeleccionada.temarioconferencia"
+                        row="2" cols="20"></textarea>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Fecha conferencia</label>
+                    <p-calendar appendTo="body" [(ngModel)]="conferenciaSeleccionada.fechainicioconferencia"
+                        [showTime]="true" hourFormat="24" dateFormat="dd/mm/yy"></p-calendar>
+                </div>
+
+                <div class="p-field">
+                    <label for="">Requerimientos conferencia</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="conferenciaSeleccionada.requerimientosconferencia"
+                        row="2" cols="20"></textarea>
+                </div>
+
+                <div class="p-field">
+                    <label for="">Máx. participantes</label>
+                    <p-inputNumber [(ngModel)]="conferenciaSeleccionada.conferenciamaxparticipante" mode="decimal"
+                        [showButtons]="true" [min]="0" [max]="100">
+                    </p-inputNumber>
+                </div>
+
+                <div class="p-field">
+                    <label for="">Lugar</label>
+                    <input type="text" pInputText [(ngModel)]="conferenciaSeleccionada.conferencialugar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" label="Cerrar" (click)="displayDialogEdit = false" styleClass="p-button-secondary">
+        </p-button>
+        <p-button icon="pi pi-check" label="Guardar" (click)="editarConferencia()" styleClass="p-button-primary">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+
+
+<!-- Dialogo de confirmación -->
+<p-confirmDialog class="p-5" header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>

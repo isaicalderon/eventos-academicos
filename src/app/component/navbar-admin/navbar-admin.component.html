@@ -15,9 +15,11 @@
                 data-bs-toggle="dropdown" aria-expanded="false">Usuarios</a>
             <ul class="dropdown-menu w-100" aria-labelledby="navbarDropdown">
                 <li><a href="operadores.html" class="dropdown-item text-light pl-4 p-2">Operadores</a></li>
-                <li><a href="conferencista.html" class="dropdown-item text-light pl-4 p-2">Conferencistas</a></li>
+                <li><a href="#" [routerLink]="['/admin/conferencista']"
+                        class="dropdown-item text-light pl-4 p-2">Conferencistas</a></li>
                 <li><a href="tallerista.html" class="dropdown-item text-light pl-4 p-2">Talleristas</a></li>
-                <li><a href="#" [routerLink]="['/admin/estudiantes']" class="dropdown-item text-light pl-4 p-2">Estudiantes</a></li>
+                <li><a href="#" [routerLink]="['/admin/estudiantes']"
+                        class="dropdown-item text-light pl-4 p-2">Estudiantes</a></li>
             </ul>
         </li>
         <li class="nav-item w-100">
@@ -27,7 +29,7 @@
             <a href="#" [routerLink]="['/admin/talleres']" class="nav-link text-light pl-4">Talleres</a>
         </li>
         <li class="nav-item w-100">
-            <a href="conferencias.html" class="nav-link text-light pl-4">Conferencias</a>
+            <a href="#" [routerLink]="['/admin/conferencias']" class="nav-link text-light pl-4">Conferencias</a>
         </li>
         <li class="nav-item w-100">
             <a href="visitas.html" class="nav-link text-light pl-4">Visitas</a>

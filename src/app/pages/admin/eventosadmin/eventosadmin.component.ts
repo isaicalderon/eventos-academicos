@@ -68,12 +68,21 @@ export class EventosadminComponent implements OnInit {
     }
 
     guardarEvento() {
-        this.eventosService.guardarEvento(this.eventoNew).subscribe(res => {
-            this.showMensaje('success', 'Mensaje', 'Se creó correctamente.');
-            this.eventosService.obtenerEventos().then(res => this.eventosList = res);
-            this.eventoNew = new Eventos();
-            this.fDisplayCreateDialog();
-        });
+        try {
+            this.eventosService.guardarEvento(this.eventoNew).subscribe(
+                res => {
+                    this.showMensaje('success', 'Mensaje', 'Se creó correctamente.');
+                    this.eventosService.obtenerEventos().then(res => this.eventosList = res);
+                    this.eventoNew = new Eventos();
+                    this.fDisplayCreateDialog();
+                },
+                err => {
+                    this.showMensaje('error', 'Mensaje', 'Ocurrió un error al intentar guardar');
+                }
+            );
+        } catch (error) {
+            this.showMensaje('warn', 'Mensaje', 'No se pudo guardar, es posible que un campo este incompleto.');
+        }
     }
 
     formatDate(date) {
@@ -116,19 +125,30 @@ export class EventosadminComponent implements OnInit {
     }
 
     confirmDelete(evento: any) {
-        this.confirmationService.confirm({
-            message: `Los datos no podrán ser restaurados ¿Desea Eliminar el evento: ${evento.nombreevento} ?`,
-            acceptLabel: 'Sí',
-            acceptButtonStyleClass: 'p-button-primary',
-            rejectButtonStyleClass: 'p-button-secondary',
-            defaultFocus: 'reject',
-            accept: () => {
-                this.eventosService.borrarEvento(evento.ideventos).subscribe(res => {
-                    this.showMensaje('success', 'Mensaje', 'Se eliminó correctamente.');
-                    this.eventosService.obtenerEventos().then(res => this.eventosList = res);
-                });
-            }
-        });
+        try {
+
+
+            this.confirmationService.confirm({
+                message: `Los datos no podrán ser restaurados ¿Desea Eliminar el evento: ${evento.nombreevento} ?`,
+                acceptLabel: 'Sí',
+                acceptButtonStyleClass: 'p-button-primary',
+                rejectButtonStyleClass: 'p-button-secondary',
+                defaultFocus: 'reject',
+                accept: () => {
+                    this.eventosService.borrarEvento(evento.ideventos).subscribe(
+                        res => {
+                            this.showMensaje('success', 'Mensaje', 'Se eliminó correctamente.');
+                            this.eventosService.obtenerEventos().then(res => this.eventosList = res);
+                        },
+                        err => {
+                            this.showMensaje('error', 'Mensaje', 'No se pudo borrar, es posible que exista un registro ligado a este evento');
+                        }
+                    );
+                }
+            });
+        } catch (error) {
+            this.showMensaje('warn', 'Mensaje', 'No se pudo borrar');
+        }
     }
 
     fDisplayEditDialog(eventoSeleccionado) {
@@ -147,7 +167,7 @@ export class EventosadminComponent implements OnInit {
 
         /* código para fixear la horá porque se buggea al subir y se suman 7 horas más */
         // Sí la fecha se registrá diferente (osea bien) comentar estas lineas de código 
-        let hourFix = this.eventoSeleccionado.fechainicioevento.getHours() - 7; 
+        let hourFix = this.eventoSeleccionado.fechainicioevento.getHours() - 7;
         this.eventoSeleccionado.fechainicioevento.setHours(hourFix);
         hourFix = this.eventoSeleccionado.fechafinEvento.getHours() - 7;
         this.eventoSeleccionado.fechafinEvento.setHours(hourFix);
