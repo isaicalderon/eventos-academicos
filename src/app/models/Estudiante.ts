@@ -4,8 +4,12 @@ export class Estudiante {
     public matriculaestudiantes: number;
     public nombreestudiantes: string;
     public apellidosestudiante: string
-    public correoestudiantes: string
+    public correoestudiantes: string;
+
+    // dto paquete
     public idpaquetes: number;
+    public descripcionpaquete: string;
+    
     public idgafetes: number
 
     constructor() { }

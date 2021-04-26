@@ -5,6 +5,8 @@ import { Eventos } from 'src/app/models/Eventos';
 import { Talleres } from 'src/app/models/Talleres';
 import { EventosService } from 'src/app/services/eventos.service';
 import { TalleresService } from 'src/app/services/talleres.service';
+import { TalleristasService } from '../../../services/talleristas.service';
+import { Tallerista } from 'src/app/models/Tallerista';
 
 @Component({
     selector: 'app-talleres',
@@ -22,6 +24,9 @@ export class TalleresComponent implements OnInit {
     tallerSeleccionado: Talleres = new Talleres();
 
 
+    talleristaList: Tallerista[];
+    talleristaSelecionado: Tallerista = new Tallerista();
+
     eventosList: Eventos[];
     eventoSeleccionado: Eventos;
 
@@ -33,11 +38,13 @@ export class TalleresComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private talleresService: TalleresService,
         private eventosService: EventosService,
+        private talleristasService: TalleristasService
     ) { }
 
     ngOnInit(): void {
         this.talleresService.obtenerTalleres().then(res => this.talleresList = res);
         this.eventosService.obtenerEventos().then(res => this.eventosList = res);
+        this.talleristasService.obtenerTodo().then(res => this.talleristaList = res);
 
         this.cols = [
             { field: 'nombretalleres', header: 'Nombre Taller' },
@@ -62,7 +69,15 @@ export class TalleresComponent implements OnInit {
 
     guardarTaller() {
         try {
+            /* código para fixear la horá porque se buggea al subir y se suman 7 horas más */
+            // Sí la fecha se registrá diferente (osea bien) comentar estas lineas de código 
+            let hourFix = this.tallerNew.fechainiciotaller.getHours() - 7;
+            this.tallerNew.fechainiciotaller.setHours(hourFix);
+            /* fin fix */
+
             this.tallerNew.idevento = this.eventoSeleccionado.ideventos;
+            this.tallerNew.idtallerista = this.talleristaSelecionado.idtallerista;
+
             this.talleresService.guardarTaller(this.tallerNew).subscribe(
                 res => {
                     this.fDisplayCreateDialog();
@@ -89,6 +104,7 @@ export class TalleresComponent implements OnInit {
             /* fin fix */
 
             this.tallerSeleccionado.idevento = this.eventoSeleccionado.ideventos;
+            this.tallerSeleccionado.idtallerista = this.talleristaSelecionado.idtallerista;
 
             this.talleresService.editarTaller(this.tallerSeleccionado).subscribe(
                 res => {

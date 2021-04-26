@@ -34,6 +34,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PaquetesComponent } from './pages/admin/paquetes/paquetes.component';
+import { TalleristasComponent } from './pages/admin/talleristas/talleristas.component';
 
 @NgModule({
     declarations: [
@@ -46,7 +47,8 @@ import { PaquetesComponent } from './pages/admin/paquetes/paquetes.component';
         TalleresComponent,
         ConferenciasComponent,
         ConferencistaComponent,
-        PaquetesComponent
+        PaquetesComponent,
+        TalleristasComponent
     ],
     imports: [
         BrowserModule,

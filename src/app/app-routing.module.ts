@@ -8,12 +8,14 @@ import { TalleresComponent } from './pages/admin/talleres/talleres.component';
 import { ConferenciasComponent } from './pages/admin/conferencias/conferencias.component';
 import { ConferencistaComponent } from './pages/admin/conferencista/conferencista.component';
 import { PaquetesComponent } from './pages/admin/paquetes/paquetes.component';
+import { TalleristasComponent } from './pages/admin/talleristas/talleristas.component';
 
 const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'admin/eventos', component: EventosadminComponent, canActivate: [AuthGuard] },
     { path: 'admin/estudiantes', component: EstudiantesComponent, canActivate: [AuthGuard] },
     { path: 'admin/talleres', component: TalleresComponent, canActivate: [AuthGuard] },
+    { path: 'admin/talleristas', component: TalleristasComponent, canActivate: [AuthGuard] },
     { path: 'admin/conferencias', component: ConferenciasComponent, canActivate: [AuthGuard] },
     { path: 'admin/conferencista', component: ConferencistaComponent, canActivate: [AuthGuard] },
     { path: 'admin/paquetes', component: PaquetesComponent, canActivate: [AuthGuard] },

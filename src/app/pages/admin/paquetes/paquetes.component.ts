@@ -17,8 +17,8 @@ export class PaquetesComponent implements OnInit {
     displayDialogEdit: boolean = false;
 
     paquetesList: Paquetes[];
-    paqueteNew: Paquetes = new Paquetes;
-    paqueteSeleccionado: Paquetes = new Paquetes;
+    paqueteNew: Paquetes = new Paquetes();
+    paqueteSeleccionado: Paquetes = new Paquetes();
 
     eventosList: Eventos[];
     eventoSeleccionado: Eventos = new Eventos();
@@ -81,7 +81,7 @@ export class PaquetesComponent implements OnInit {
                 err => {
                     this.showMensaje('error', 'Alerta', 'Ocurrió un error al intentar editar');
                 }
-            )
+            );
         } catch (error) {
             this.showMensaje('warn', 'Alerta', 'No se pudo editar el Paquete, es posible que falte un campo por llenar');
         }

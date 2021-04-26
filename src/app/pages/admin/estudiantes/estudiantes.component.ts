@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Estudiante } from '../../../models/Estudiante';
 import { EstudianteService } from '../../../services/estudiante.service';
+import { Paquetes } from '../../../models/Paquetes';
+import { PaquetesService } from '../../../services/paquetes.service';
 
 @Component({
     selector: 'app-estudiantes',
@@ -13,21 +15,27 @@ export class EstudiantesComponent implements OnInit {
 
     displayDialogAdd: boolean = false;
     displayDialogEdit: boolean = false;
+
     estudiantesList: Estudiante[];
     estudianteNew: Estudiante = new Estudiante();
     estudianteSeleccionado: Estudiante = new Estudiante();
+
+    paquetesList: Paquetes[];
+    paqueteSeleccionado: Paquetes = new Paquetes();
 
     cols: any[];
     exportColumns: any[];
 
     constructor(
-        private estudianteService: EstudianteService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
+        private estudianteService: EstudianteService,
+        private paquetesService: PaquetesService,
     ) { }
 
     ngOnInit(): void {
         this.estudianteService.obtenerEstudiantes().then(data => this.estudiantesList = data);
+        this.paquetesService.obtenerTodo().then(res => this.paquetesList = res);
 
         this.cols = [
             { field: 'matriculaestudiantes', header: 'Matricula' },
@@ -50,20 +58,28 @@ export class EstudiantesComponent implements OnInit {
     }
 
     guardarEstudiante() {
-        this.estudianteService.guardarEstudiante(this.estudianteNew).subscribe(res => {
-            if (res) {
-                this.fDisplayDialogAdd();
-                this.estudianteService.obtenerEstudiantes().then(data => this.estudiantesList = data);
-                this.estudianteNew = new Estudiante();
-            }
-        },
-            err => {
-                this.showMensaje('error', 'Alerta', 'No se pudo registrar al estudiante.');
-            });
+        try {
+            this.estudianteNew.idpaquetes = this.paqueteSeleccionado.idpaquetes;
+            
+            this.estudianteService.guardarEstudiante(this.estudianteNew).subscribe(
+                res => {
+                    this.fDisplayDialogAdd();
+                    this.estudianteService.obtenerEstudiantes().then(data => this.estudiantesList = data);
+                    this.estudianteNew = new Estudiante();
+                },
+                err => {
+                    this.showMensaje('error', 'Alerta', 'No se pudo registrar al estudiante.');
+                }
+            );
+        } catch (error) {
+            this.showMensaje('warn', 'Alerta', 'Es posible que un campo este vacío');
+        }
     }
 
     editarEstudiante() {
         try {
+            this.estudianteSeleccionado.idpaquetes = this.paqueteSeleccionado.idpaquetes;
+
             this.estudianteService.editarEstudiante(this.estudianteSeleccionado).subscribe(
                 res => {
                     this.fDisplayDialogEdit(null);

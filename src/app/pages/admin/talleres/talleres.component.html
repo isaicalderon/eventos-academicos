@@ -5,7 +5,7 @@
     <section class="p-3">
 
         <h1 class="text-center">Talleres</h1>
-        
+
         <div class="mb-2">
             <!--Boton de registro-->
             <button type="button" class="btn btn-primary" (click)="fDisplayCreateDialog()">
@@ -59,6 +59,9 @@
                     <th pSortableColumn="nombreevento">Nombre evento
                         <p-sortIcon field="nombreevento"></p-sortIcon>
                     </th>
+                    <th pSortableColumn="nombreevento">Tallerista
+                        <p-sortIcon field="nombreevento"></p-sortIcon>
+                    </th>
 
                     <th style="width: 120px;">Opciones</th>
                 </tr>
@@ -73,6 +76,7 @@
                     <td>{{taller.tallerlugar}}</td>
                     <td>{{formatDate(taller.fechainiciotaller)}}</td>
                     <td>{{taller.nombreevento}}</td>
+                    <td>{{taller.talleristanombre}}</td>
                     <td>
                         <button type="button" class="p-button-rounded p-button-info" pButton
                             (click)="fDisplayDialogEdit(taller)" icon="pi pi-pencil">
@@ -90,46 +94,58 @@
 </div>
 
 <!-- Dialogo crear evento -->
-<p-dialog header="Registrar Taller" [(visible)]="displayCreateDialog" [modal]="true" [style]="{width: '40vw'}">
+<p-dialog header="Registrar Taller" [(visible)]="displayCreateDialog" [modal]="true" [style]="{width: '50vw'}">
     <div class="p-fluid p-2 pt-3">
-        <div class="p-field">
-            <label for="">Nombre del taller</label>
-            <input type="text" pInputText [(ngModel)]="tallerNew.nombretalleres">
-        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Evento</label>
+                    <p-dropdown appendTo="body" [options]="eventosList" [(ngModel)]="eventoSeleccionado"
+                        optionLabel="nombreevento" placeholder="Selecciona un evento">
+                    </p-dropdown>
+                </div>
+                <div class="p-field">
+                    <label for="">Tallerista</label>
+                    <p-dropdown appendTo="body" [options]="talleristaList" [(ngModel)]="talleristaSelecionado"
+                        optionLabel="talleristanombre" placeholder="Selecciona un tallerista">
+                    </p-dropdown>
+                </div>
+                <div class="p-field">
+                    <label for="">Nombre del taller</label>
+                    <input type="text" pInputText [(ngModel)]="tallerNew.nombretalleres">
+                </div>
 
-        <div class="p-field">
-            <label for="">Descripción taller</label>
-            <textarea type="text" pInputTextarea [(ngModel)]="tallerNew.descripciontaller" [rows]="2"
-                [cols]="10"></textarea>
-        </div>
+                <div class="p-field">
+                    <label for="">Descripción taller</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="tallerNew.descripciontaller" [rows]="2"
+                        [cols]="10"></textarea>
+                </div>
 
-        <div class="p-field">
-            <label for="">Requerimientos taller</label>
-            <textarea type="text" pInputTextarea [(ngModel)]="tallerNew.requerimientostaller" [rows]="2"
-                [cols]="10"></textarea>
-        </div>
+            </div>
 
-        <div class="p-field">
-            <label for="">Máx. Participantes</label>
-            <input type="text" pInputText [(ngModel)]="tallerNew.tallermaxparticipante">
-        </div>
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Requerimientos taller</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="tallerNew.requerimientostaller" [rows]="2"
+                        [cols]="10"></textarea>
+                </div>
+                <div class="p-field">
+                    <label for="">Máx. Participantes</label>
+                    <input type="text" pInputText [(ngModel)]="tallerNew.tallermaxparticipante">
+                </div>
 
-        <div class="p-field">
-            <label for="">Lugar taller</label>
-            <input type="text" pInputText [(ngModel)]="tallerNew.tallerlugar">
-        </div>
+                <div class="p-field">
+                    <label for="">Lugar taller</label>
+                    <input type="text" pInputText [(ngModel)]="tallerNew.tallerlugar">
+                </div>
 
-        <div class="p-field">
-            <label for="">Hora taller</label>
-            <p-calendar appendTo="body" [(ngModel)]="tallerNew.fechainiciotaller" [timeOnly]="true" hourFormat="12">
-            </p-calendar>
-        </div>
-
-        <div class="p-field">
-            <label for="">Evento</label>
-            <p-dropdown appendTo="body" [options]="eventosList" [(ngModel)]="eventoSeleccionado"
-                optionLabel="nombreevento" placeholder="Selecciona un evento">
-            </p-dropdown>
+                <div class="p-field">
+                    <label for="">Hora taller</label>
+                    <p-calendar appendTo="body" [(ngModel)]="tallerNew.fechainiciotaller" [timeOnly]="true"
+                        hourFormat="12">
+                    </p-calendar>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -143,46 +159,56 @@
 
 <p-dialog header="Editar Taller" [(visible)]="displayDialogEdit" [modal]="true" [style]="{width: '40vw'}">
     <div class="p-fluid p-2 pt-3">
-        <div class="p-field">
-            <label for="">Nombre del taller</label>
-            <input type="text" pInputText [(ngModel)]="tallerSeleccionado.nombretalleres">
-        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Evento</label>
+                    <p-dropdown appendTo="body" [options]="eventosList" [(ngModel)]="eventoSeleccionado"
+                        optionLabel="nombreevento" placeholder="Selecciona un evento">
+                    </p-dropdown>
+                </div>
+                <div class="p-field">
+                    <label for="">Tallerista</label>
+                    <p-dropdown appendTo="body" [options]="talleristaList" [(ngModel)]="talleristaSelecionado"
+                        optionLabel="talleristanombre" placeholder="Selecciona un tallerista">
+                    </p-dropdown>
+                </div>
+                <div class="p-field">
+                    <label for="">Nombre del taller</label>
+                    <input type="text" pInputText [(ngModel)]="tallerSeleccionado.nombretalleres">
+                </div>
 
-        <div class="p-field">
-            <label for="">Descripción taller</label>
-            <textarea type="text" pInputTextarea [(ngModel)]="tallerSeleccionado.descripciontaller" [rows]="2"
-                [cols]="10"></textarea>
-        </div>
+                <div class="p-field">
+                    <label for="">Descripción taller</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="tallerSeleccionado.descripciontaller" [rows]="2"
+                        [cols]="10"></textarea>
+                </div>
 
-        <div class="p-field">
-            <label for="">Requerimientos taller</label>
-            <textarea type="text" pInputTextarea [(ngModel)]="tallerSeleccionado.requerimientostaller" [rows]="2"
-                [cols]="10"></textarea>
-        </div>
+            </div>
 
-        <div class="p-field">
-            <label for="">Máx. Participantes</label>
-            <input type="text" pInputText [(ngModel)]="tallerSeleccionado.tallermaxparticipante">
-        </div>
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Requerimientos taller</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="tallerSeleccionado.requerimientostaller"
+                        [rows]="2" [cols]="10"></textarea>
+                </div>
+                <div class="p-field">
+                    <label for="">Máx. Participantes</label>
+                    <input type="text" pInputText [(ngModel)]="tallerSeleccionado.tallermaxparticipante">
+                </div>
 
-        <div class="p-field">
-            <label for="">Lugar taller</label>
-            <input type="text" pInputText [(ngModel)]="tallerSeleccionado.tallerlugar">
-        </div>
+                <div class="p-field">
+                    <label for="">Lugar taller</label>
+                    <input type="text" pInputText [(ngModel)]="tallerSeleccionado.tallerlugar">
+                </div>
 
-        <div class="p-field">
-            <label for="">Hora taller</label>
-            <p-calendar appendTo="body" [(ngModel)]="tallerSeleccionado.fechainiciotaller" [timeOnly]="true"
-                placeholder="Time"
-                hourFormat="12">
-            </p-calendar>
-        </div>
-
-        <div class="p-field">
-            <label for="">Evento</label>
-            <p-dropdown appendTo="body" [options]="eventosList" [(ngModel)]="eventoSeleccionado"
-                optionLabel="nombreevento" placeholder="Selecciona un evento">
-            </p-dropdown>
+                <div class="p-field">
+                    <label for="">Hora taller</label>
+                    <p-calendar appendTo="body" [(ngModel)]="tallerSeleccionado.fechainiciotaller" [timeOnly]="true"
+                        hourFormat="12">
+                    </p-calendar>
+                </div>
+            </div>
         </div>
     </div>
 

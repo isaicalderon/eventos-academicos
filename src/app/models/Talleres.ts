@@ -14,4 +14,9 @@ export class Talleres {
     idevento: number;
     nombreevento: string;
 
+    // dto tallerista
+    idtallerista: number;
+    talleristanombre: string;
+
+
 }
