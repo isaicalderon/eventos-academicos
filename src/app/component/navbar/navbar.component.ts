@@ -10,8 +10,10 @@ import { AuthService } from '../../services/auth.service';
 })
 export class NavbarComponent implements OnInit {
 
-    adminLogin: Admin = new Admin();
+    displayDialogLogin: boolean = false;
     loginAuthError: boolean = false;
+
+    adminLogin: Admin = new Admin();
 
 
     constructor(
@@ -20,22 +22,27 @@ export class NavbarComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        // para redireccionar en caso de que entre al Home y tenga login
+        if (this.verifyLogin()) {
+            this.router.navigate(['/admin/eventos']);
+        }
     }
 
     login(): void {
-        var myModal = document.getElementById('inicia-s');
-        var blur = document.getElementsByClassName('modal-backdrop');
 
         this.authService.loginAdmin(this.adminLogin).subscribe(
             res => {
                 this.loginAuthError = false;
-                myModal.classList.remove('show');
-                blur[0].classList.remove('show');
+                this.fDisplayDialogLogin();
                 localStorage.setItem('token', res['token']);
-                this.router.navigate(['/admin/eventos'])
+                this.router.navigate(['/admin/eventos']);
             },
             err => this.loginAuthError = true
         );
+    }
+
+    fDisplayDialogLogin() {
+        this.displayDialogLogin = !this.displayDialogLogin;
     }
 
     verifyLogin() {

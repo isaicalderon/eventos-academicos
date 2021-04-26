@@ -1,0 +1,187 @@
+<app-navbar-admin></app-navbar-admin>
+<p-toast></p-toast>
+
+
+<section class="p-3 my-container">
+
+    <h1 class="text-center">Visitas</h1>
+
+    <div class="mb-3">
+        <!--Boton de registro-->
+        <button type="button" class="btn btn-primary" (click)="fDisplayDialogAdd()">
+            Nuevo
+        </button>
+    </div>
+
+    <p-table #dt1 [value]="visitasList" dataKey="idvisitas" styleClass="p-datatable-sm p-datatable-responsive-demo"
+        [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]"
+        [globalFilterFields]="['visitanombre','visitadescripción','visitafechainicio','visitafechafin','visitalugar','visitamaxparticipante','nombreevento']">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex">
+                <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                    class="p-button-success p-mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+                <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                    class="p-button-warning p-mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+                <span class="p-input-icon-left p-ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Búsqueda general" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="visitanombre"> Nombre visita
+                    <p-sortIcon field="visitanombre"></p-sortIcon>
+                </th>
+                <th pSortableColumn="visitadescripcion"> Descripción visita
+                    <p-sortIcon field="visitadescripcion"></p-sortIcon>
+                </th>
+                <th pSortableColumn="visitafechainicio"> Fecha inicio
+                    <p-sortIcon field="visitafechainicio"></p-sortIcon>
+                </th>
+                <th pSortableColumn="visitafechafin"> Fecha fin
+                    <p-sortIcon field="visitafechafin"></p-sortIcon>
+                </th>
+                <th pSortableColumn="visitalugar"> Lugar visita
+                    <p-sortIcon field="visitalugar"></p-sortIcon>
+                </th>
+                <th pSortableColumn="visitamaxparticipante"> Máx. Participantes
+                    <p-sortIcon field="visitamaxparticipante"></p-sortIcon>
+                </th>
+                <th pSortableColumn="nombreevento"> Evento
+                    <p-sortIcon field="nombreevento"></p-sortIcon>
+                </th>
+                <th style="width: 120px;">Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-visita>
+            <tr>
+                <td>{{visita.visitanombre}}</td>
+                <td>{{visita.visitadescripcion}}</td>
+                <td>{{formatDate(visita.visitafechainicio)}}</td>
+                <td>{{formatDate(visita.visitafechafin)}}</td>
+                <td>{{visita.visitalugar}}</td>
+                <td>{{visita.visitamaxparticipante}}</td>
+                <td>{{visita.nombreevento}}</td>
+
+                <td>
+                    <button pButton class="p-button-rounded" icon="pi pi-pencil"
+                        (click)="fDisplayDialogEdit(visita)"></button>
+                    <button pButton class="p-button-rounded p-button-warning" icon="pi pi-trash"
+                        (click)="confirmDelete(visita)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</section>
+
+
+<p-dialog header="Registrar Visita" [(visible)]="displayDialogAdd" [modal]="true" [style]="{width: '40vw'}">
+    <div class="p-fluid p-2 pt-3">
+        <div class="p-field">
+            <label for="">Nombre visita</label>
+            <input type="text" pInputText [(ngModel)]="visitaNew.visitanombre">
+        </div>
+
+        <div class="p-field">
+            <label for="">Descripción visita</label>
+            <input type="text" pInputText [(ngModel)]="visitaNew.visitadescripcion">
+        </div>
+
+        <div class="p-field">
+            <label for="">Fecha Inicio</label>
+            <p-calendar appendTo="body" [(ngModel)]="visitaNew.visitafechainicio" [showTime]="true" hourFormat="24"
+                dateFormat="dd/mm/yy"></p-calendar>
+        </div>
+
+        <div class="p-field">
+            <label for="">Fecha Fin</label>
+            <p-calendar appendTo="body" [(ngModel)]="visitaNew.visitafechafin" [showTime]="true" hourFormat="24"
+                dateFormat="dd/mm/yy"></p-calendar>
+        </div>
+
+        <div class="p-field">
+            <label for="">Lugar visita</label>
+            <input type="text" pInputText [(ngModel)]="visitaNew.visitalugar">
+        </div>
+
+        <div class="p-field">
+            <label for="">Máx. Participantes</label>
+            <p-inputNumber [(ngModel)]="visitaNew.visitamaxparticipante" mode="decimal" [showButtons]="true" [min]="0"
+                [max]="100">
+            </p-inputNumber>
+        </div>
+
+        <div class="p-field">
+            <label for="">Evento</label>
+            <p-dropdown appendTo="body" [options]="eventosList" [(ngModel)]="eventoSeleccionado"
+                optionLabel="nombreevento" placeholder="Selecciona un evento">
+            </p-dropdown>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" label="Cerrar" (click)="fDisplayDialogAdd()" styleClass="p-button-secondary">
+        </p-button>
+        <p-button icon="pi pi-check" label="Guardar" (click)="guardarVisita()" styleClass="p-button-primary">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Editar Visita" [(visible)]="displayDialogEdit" [modal]="true" [style]="{width: '40vw'}">
+    <div class="p-fluid p-2 pt-3">
+        <div class="p-field">
+            <label for="">Nombre visita</label>
+            <input type="text" pInputText [(ngModel)]="visitaSlecccionada.visitanombre">
+        </div>
+
+        <div class="p-field">
+            <label for="">Descripción visita</label>
+            <input type="text" pInputText [(ngModel)]="visitaSlecccionada.visitadescripcion">
+        </div>
+
+        <div class="p-field">
+            <label for="">Fecha Inicio</label>
+            <p-calendar appendTo="body" [(ngModel)]="visitaSlecccionada.visitafechainicio" [showTime]="true"
+                hourFormat="24" dateFormat="dd/mm/yy"></p-calendar>
+        </div>
+
+        <div class="p-field">
+            <label for="">Fecha Fin</label>
+            <p-calendar appendTo="body" [(ngModel)]="visitaSlecccionada.visitafechafin" [showTime]="true"
+                hourFormat="24" dateFormat="dd/mm/yy"></p-calendar>
+        </div>
+
+        <div class="p-field">
+            <label for="">Lugar visita</label>
+            <input type="text" pInputText [(ngModel)]="visitaSlecccionada.visitalugar">
+        </div>
+
+        <div class="p-field">
+            <label for="">Máx. Participantes</label>
+            <p-inputNumber [(ngModel)]="visitaSlecccionada.visitamaxparticipante" mode="decimal" [showButtons]="true"
+                [min]="0" [max]="100">
+            </p-inputNumber>
+        </div>
+
+        <div class="p-field">
+            <label for="">Evento</label>
+            <p-dropdown appendTo="body" [options]="eventosList" [(ngModel)]="eventoSeleccionado"
+                optionLabel="nombreevento" placeholder="Selecciona un evento">
+            </p-dropdown>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" label="Cerrar" (click)="displayDialogEdit = false" styleClass="p-button-secondary">
+        </p-button>
+        <p-button icon="pi pi-check" label="Guardar" (click)="editarVisita()" styleClass="p-button-primary">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<!-- Dialogo de confirmación -->
+<p-confirmDialog class="p-5" header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>

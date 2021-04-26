@@ -4,7 +4,7 @@
         <a class="navbar-brand " href="#">
             <img src="/assets/img/logoBlanco.png" alt="Logo Itesca" height="40">
         </a>
-        <button class="btn btn-primary" type="button" (click)='activeAdminNav(true)'>
+        <button *ngIf="verifyLogin()" class="btn btn-primary" type="button" (click)='activeAdminNav(true)'>
             <i class="fas fa-bars"></i> Menú
         </button>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -14,8 +14,8 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-1">
                 <li class="nav-item" *ngIf="!verifyLogin()">
-                    <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#inicia-s">Iniciar
-                        Sesion</a>
+                    <label class="nav-link text-white" href="#" (click)="fDisplayDialogLogin()">Iniciar
+                        Sesion</label>
                 </li>
                 <li class="nav-item" *ngIf="verifyLogin()">
                     <a class="nav-link text-white" href="#" (click)="logout()">
@@ -27,102 +27,29 @@
 </nav>
 
 
-<!--Login-->
-<div class="modal fade" id="inicia-s" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger ">
-                <h5 class="modal-title text-light" id="exampleModalLabel">Iniciar Sesion</h5>
-                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div *ngIf="loginAuthError" class="alert alert-warning" role="alert">
-                    Usuario o contraseña invalido.
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Nombre de usuario"
-                        [(ngModel)]="adminLogin.administradorUsuario">
-                    <label for="floatingInput">Usuario</label>
-                </div>
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
-                        [(ngModel)]="adminLogin.administradorPassword">
-                    <label for="floatingPassword">Password</label>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" (click)="login()">Iniciar sesion</button>
-            </div>
+<p-dialog header="Iniciar sesión" [(visible)]="displayDialogLogin" position="top" [modal]="true"
+    [style]="{width: '25vw'}" [draggable]="false" [resizable]="false">
+    <div class="p-fluid p-2 pt-3">
+        <div *ngIf="loginAuthError" class="alert alert-warning" role="alert">
+            Usuario o contraseña invalido.
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" placeholder="Nombre de usuario"
+                [(ngModel)]="adminLogin.administradorUsuario">
+            <label for="floatingInput">Usuario</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
+                [(ngModel)]="adminLogin.administradorPassword">
+            <label for="floatingPassword">Password</label>
         </div>
     </div>
-</div>
 
-<!--Registrar-->
-<div class="modal fade" id="registrarse" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger">
-                <h5 class="modal-title bg-navbar text-light" id="exampleModalLabel">Registrarse</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="insert.php" class="row g-2">
-                    <div class="col-md-6">
-                        <label for="validationServer01" class="form-label">Nombre</label>
-                        <input type="text" name="EstudianteNombre" required class="form-control "
-                            id="validationServer01" value="Mark" required>
-                        <div class="valid-feedback">
-
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="validationServer02" class="form-label">Apellido</label>
-                        <input type="text" name="EstudianteApellido" required class="form-control "
-                            id="validationServer02" value="Otto" required>
-                        <div class="valid-feedback">
-
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="validationServer03" class="form-label">Matricula</label>
-                        <input type="int" name="Matricula" class="form-control " id="validationServer03"
-                            aria-describedby="validationServer03Feedback" required>
-                        <div id="validationServer03Feedback" class="invalid-feedback">
-                            Favor de agregar matricula de manera correcta.
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="validationServer03" class="form-label">Correo electronico</label>
-                        <input type="text" name="EstudianteCorreo" class="form-control " id="validationServer03"
-                            aria-describedby="validationServer03Feedback" required>
-                        <div id="validationServer03Feedback" class="invalid-feedback">
-                            Favor de agregar correo electronico de manera correcta.
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="validationServer04" class="form-label">Paquete de evento</label>
-                        <select name="TipoPaqueteEstudiante" class="form-select is-invalid" id="validationServer04"
-                            aria-describedby="validationServer04Feedback" required>
-                            <option selected disabled value="">...</option>
-                            <option value="Basico">Basico</option>
-                            <option value="Premium">Premium</option>
-                        </select>
-                        <div id="validationServer04Feedback" class="invalid-feedback">
-                            Favor de seleccionar un paquete.
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" value="submit" class="btn btn-primary" data-bs-dismiss="modal">Registrar</button>
-            </div>
-        </div>
-    </div>
-</div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" label="Cerrar" (click)="displayDialogLogin = false"
+            styleClass="p-button-secondary">
+        </p-button>
+        <p-button icon="pi pi-user" label="Login" (click)="login()" styleClass="p-button-primary">
+        </p-button>
+    </ng-template>
+</p-dialog>

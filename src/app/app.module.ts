@@ -35,6 +35,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PaquetesComponent } from './pages/admin/paquetes/paquetes.component';
 import { TalleristasComponent } from './pages/admin/talleristas/talleristas.component';
+import { VisitasComponent } from './pages/admin/visitas/visitas.component';
 
 @NgModule({
     declarations: [
@@ -48,7 +49,8 @@ import { TalleristasComponent } from './pages/admin/talleristas/talleristas.comp
         ConferenciasComponent,
         ConferencistaComponent,
         PaquetesComponent,
-        TalleristasComponent
+        TalleristasComponent,
+        VisitasComponent
     ],
     imports: [
         BrowserModule,
