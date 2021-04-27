@@ -7,6 +7,7 @@ import { EventosService } from '../../../services/eventos.service';
 import { ConferencistaService } from '../../../services/conferencista.service';
 import { Conferencista } from 'src/app/models/Conferencista';
 import * as moment from 'moment';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-conferencias',
@@ -33,7 +34,8 @@ export class ConferenciasComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private conferenciasService: ConferenciasService,
         private eventosService: EventosService,
-        private conferencistaService: ConferencistaService
+        private conferencistaService: ConferencistaService,
+        private authService: AuthService
     ) { }
 
 
@@ -120,5 +122,9 @@ export class ConferenciasComponent implements OnInit {
 
     showMensaje(severity, summary, details) {
         this.messageService.add({ severity: severity, summary: summary, detail: details });
+    }
+
+    isAdmin() {
+        return this.authService.isAdmin();
     }
 }

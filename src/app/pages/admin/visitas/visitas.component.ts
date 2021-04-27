@@ -5,6 +5,7 @@ import { Eventos } from '../../../models/Eventos';
 import { Visitas } from '../../../models/Visitas';
 import { VisitasService } from '../../../services/visitas.service';
 import * as moment from 'moment';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-visitas',
@@ -31,7 +32,8 @@ export class VisitasComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private eventosService: EventosService,
-        private visitasService: VisitasService
+        private visitasService: VisitasService,
+        private authService: AuthService
     ) { }
 
     ngOnInit(): void {
@@ -173,5 +175,9 @@ export class VisitasComponent implements OnInit {
 
     showMensaje(severity, summary, details) {
         this.messageService.add({ severity: severity, summary: summary, detail: details });
+    }
+
+    isAdmin() {
+        return this.authService.isAdmin();
     }
 }

@@ -4,6 +4,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { PaquetesService } from '../../../services/paquetes.service';
 import { EventosService } from '../../../services/eventos.service';
 import { Eventos } from '../../../models/Eventos';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-paquetes',
@@ -30,7 +31,8 @@ export class PaquetesComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private paquetesService: PaquetesService,
-        private eventosService: EventosService
+        private eventosService: EventosService,
+        private authService: AuthService
     ) { }
 
     ngOnInit(): void {
@@ -145,5 +147,8 @@ export class PaquetesComponent implements OnInit {
     showMensaje(severity, summary, details) {
         this.messageService.add({ severity: severity, summary: summary, detail: details });
     }
-
+    
+    isAdmin() {
+        return this.authService.isAdmin();
+    }
 }

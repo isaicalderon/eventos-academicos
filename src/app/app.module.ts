@@ -17,6 +17,10 @@ import { NavbarAdminComponent } from './component/navbar-admin/navbar-admin.comp
 import { TalleresComponent } from './pages/admin/talleres/talleres.component';
 import { ConferenciasComponent } from './pages/admin/conferencias/conferencias.component';
 import { ConferencistaComponent } from './pages/admin/conferencista/conferencista.component';
+import { PaquetesComponent } from './pages/admin/paquetes/paquetes.component';
+import { TalleristasComponent } from './pages/admin/talleristas/talleristas.component';
+import { VisitasComponent } from './pages/admin/visitas/visitas.component';
+import { OperadorComponent } from './pages/admin/operador/operador.component';
 
 //primeng
 import { AccordionModule } from 'primeng/accordion';     //accordion and accordion tab
@@ -33,9 +37,7 @@ import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputMaskModule } from 'primeng/inputmask';
-import { PaquetesComponent } from './pages/admin/paquetes/paquetes.component';
-import { TalleristasComponent } from './pages/admin/talleristas/talleristas.component';
-import { VisitasComponent } from './pages/admin/visitas/visitas.component';
+import {InputSwitchModule} from 'primeng/inputswitch';
 
 @NgModule({
     declarations: [
@@ -50,7 +52,8 @@ import { VisitasComponent } from './pages/admin/visitas/visitas.component';
         ConferencistaComponent,
         PaquetesComponent,
         TalleristasComponent,
-        VisitasComponent
+        VisitasComponent,
+        OperadorComponent
     ],
     imports: [
         BrowserModule,
@@ -71,7 +74,8 @@ import { VisitasComponent } from './pages/admin/visitas/visitas.component';
         ToastModule,
         DropdownModule,
         InputNumberModule,
-        InputMaskModule
+        InputMaskModule,
+        InputSwitchModule
     ],
     providers: [
         AuthService,

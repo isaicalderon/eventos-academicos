@@ -57,9 +57,9 @@
                 <td>{{paquete.nombreevento}}</td>
 
                 <td>
-                    <button pButton class="p-button-rounded" icon="pi pi-pencil"
+                    <button pButton class="p-button-rounded" icon="pi pi-pencil" [disabled]="!isAdmin()"
                         (click)="fDisplayDialogEdit(paquete)"></button>
-                    <button pButton class="p-button-rounded p-button-warning" icon="pi pi-trash"
+                    <button pButton class="p-button-rounded p-button-warning" icon="pi pi-trash" [disabled]="!isAdmin()"
                         (click)="confirmDelete(paquete)"></button>
                 </td>
             </tr>

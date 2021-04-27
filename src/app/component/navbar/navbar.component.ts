@@ -15,6 +15,7 @@ export class NavbarComponent implements OnInit {
 
     adminLogin: Admin = new Admin();
 
+    checkAdmin: boolean;
 
     constructor(
         private authService: AuthService,
@@ -22,23 +23,32 @@ export class NavbarComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        // para redireccionar en caso de que entre al Home y tenga login
-        if (this.verifyLogin()) {
-            this.router.navigate(['/admin/eventos']);
-        }
     }
 
     login(): void {
-
-        this.authService.loginAdmin(this.adminLogin).subscribe(
-            res => {
-                this.loginAuthError = false;
-                this.fDisplayDialogLogin();
-                localStorage.setItem('token', res['token']);
-                this.router.navigate(['/admin/eventos']);
-            },
-            err => this.loginAuthError = true
-        );
+        if (this.checkAdmin) {
+            this.authService.loginAdmin(this.adminLogin).subscribe(
+                res => {
+                    this.loginAuthError = false;
+                    this.fDisplayDialogLogin();
+                    localStorage.setItem('token', res['token']);
+                    localStorage.setItem('isAdmin', 'true');
+                    this.router.navigate(['/admin/eventos']);
+                },
+                err => this.loginAuthError = true
+            );
+        } else {
+            this.authService.loginOperador(this.adminLogin).subscribe(
+                res => {
+                    this.loginAuthError = false;
+                    this.fDisplayDialogLogin();
+                    localStorage.setItem('token', res['token']);
+                    localStorage.setItem('isAdmin', 'false');
+                    this.router.navigate(['/admin/eventos']);
+                },
+                err => this.loginAuthError = true
+            );
+        }
     }
 
     fDisplayDialogLogin() {
@@ -47,6 +57,10 @@ export class NavbarComponent implements OnInit {
 
     verifyLogin() {
         return this.authService.loggedIn();
+    }
+
+    verifyAdmin(){
+        return this.authService.isAdmin();
     }
 
     logout() {

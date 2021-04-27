@@ -1,20 +1,20 @@
 <nav class="navbar navbar-expand d-flex flex-column align-item-start" id="sidebar">
     <a href="#" class="navbar-brand text-light mt-5">
-        <div class="display-6 font-weight-bold">ADMIN</div>
-        <div class="text-center">Administrador</div>
+        <!-- <div class="display-6 font-weight-bold">{{getRolLogin()}}</div> -->
+        <div class="text-center">{{getRolLogin()}}</div>
     </a>
     <ul class="navbar-nav d-flex flex-column mt-5 w-100">
-        <li class="nav-item w-100">
-            <a href="perfil.html" class="nav-link text-light pl-4">Perfil</a>
-        </li>
-        <li class="nav-item w-100">
-            <a href="permisos.html" class="nav-link text-light pl-4">Permisos</a>
-        </li>
+        <!-- <li class="nav-item w-100">
+            <a href="#" class="nav-link text-light pl-4">Perfil</a>
+        </li> -->
+        <!-- <li class="nav-item w-100">
+            <a href="#" class="nav-link text-light pl-4">Permisos</a>
+        </li> -->
         <li class="nav-item dropdown w-100">
             <a href="#" class="nav-link dropdown-toggle text-light pl-4" id="navbarDropdown" role="button"
                 data-bs-toggle="dropdown" aria-expanded="false">Usuarios</a>
             <ul class="dropdown-menu w-100" aria-labelledby="navbarDropdown">
-                <li><a href="operadores.html" class="dropdown-item text-light pl-4 p-2">Operadores</a></li>
+                <li *ngIf="isAdmin() == true"><a href="#" [routerLink]="['/admin/operadores']" class="dropdown-item text-light pl-4 p-2">Operadores</a></li>
                 <li><a href="#" [routerLink]="['/admin/conferencista']"
                         class="dropdown-item text-light pl-4 p-2">Conferencistas</a></li>
                 <li><a href="#" [routerLink]="['/admin/talleristas']"
@@ -41,8 +41,8 @@
         <!-- <li class="nav-item w-100">
             <a href="calendario.html" class="nav-link text-light pl-4">Calendario</a>
         </li> -->
-        <li class="nav-item w-100">
-            <a href="gafetes.html" class="nav-link text-light pl-4">Gafetes</a>
-        </li>
+        <!-- <li class="nav-item w-100">
+            <a href="#" class="nav-link text-light pl-4"  >Gafetes</a>
+        </li> -->
     </ul>
 </nav>

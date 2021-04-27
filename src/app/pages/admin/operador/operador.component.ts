@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { Tallerista } from 'src/app/models/Tallerista';
-import { TalleristasService } from '../../../services/talleristas.service';
-import { AuthService } from '../../../services/auth.service';
+import { Operador } from '../../../models/Operador';
+import { OperadorService } from '../../../services/operador.service';
 
 @Component({
-    selector: 'app-talleristas',
-    templateUrl: './talleristas.component.html',
-    styleUrls: ['./talleristas.component.css'],
+    selector: 'app-operador',
+    templateUrl: './operador.component.html',
+    styleUrls: ['./operador.component.css'],
     providers: [MessageService]
 })
-export class TalleristasComponent implements OnInit {
+export class OperadorComponent implements OnInit {
 
     displayDialogAdd: boolean = false;
     displayDialogEdit: boolean = false;
 
-    talleristaList: Tallerista[];
-    talleristaNew: Tallerista = new Tallerista();
-    talleristaSeleccionado: Tallerista = new Tallerista();
+    operadoresList: Operador[];
+    operadorNew: Operador = new Operador();
+    operadorSeleccionado = new Operador();
 
     cols: any[];
     exportColumns: any[];
@@ -25,81 +24,79 @@ export class TalleristasComponent implements OnInit {
     constructor(
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private talleristaService: TalleristasService,
-        private authService: AuthService
+        private operadoresService: OperadorService
     ) { }
 
     ngOnInit(): void {
-        this.talleristaService.obtenerTodo().then(res => this.talleristaList = res);
+        this.operadoresService.obtenerTodo().then(res => this.operadoresList = res);
 
         this.cols = [
-            { field: 'talleristanombre', header: 'Nombre Tallerista' },
-            { field: 'talleristacorreo', header: 'Correo Tallerista' },
-            { field: 'talleristatelefono', header: 'Telefono Tallerista' },
-            { field: 'talleristacurriculo', header: 'Curriculo' },
+            { field: 'usernameoperador', header: 'Username Operador' },
+            { field: 'passwordoperador', header: 'Contraseá Operador' },
+            { field: 'nombreoperador', header: 'Nombre operador' }
         ];
 
         this.exportColumns = this.cols.map(col => ({ title: col.header, dataKey: col.field }));
     }
 
-    guardarTallerista() {
+    guardarOperador() {
         try {
-            this.talleristaService.guardar(this.talleristaNew).subscribe(
+            this.operadoresService.guardar(this.operadorNew).subscribe(
                 res => {
                     this.showMensaje('info', 'Mensaje', 'Se guardó correctamente');
                     this.fDisplayDialogAdd();
-                    this.talleristaNew = new Tallerista();
-                    this.talleristaService.obtenerTodo().then(res => this.talleristaList = res);
+                    this.operadorNew = new Operador();
+                    this.operadoresService.obtenerTodo().then(res => this.operadoresList = res);
                 },
                 err => {
-                    this.showMensaje('error', 'Alerta', 'Ocurrió un errro al intentar guardar');
+                    this.showMensaje('error', 'Mensaje', 'Ocurrió un error al intentar guardar');
                 }
-            )
+            );
         } catch (error) {
-            this.showMensaje('warn', 'Alerta', 'No se pudo guardar el Tallerista, es posible que falte un campo por llenar');
+            this.showMensaje('warn', 'Mensaje', 'No se pudo guardar');
         }
     }
 
-    editarTallerista() {
+    editarOperador() {
         try {
-            this.talleristaService.editar(this.talleristaSeleccionado).subscribe(
+            this.operadoresService.editar(this.operadorSeleccionado).subscribe(
                 res => {
                     this.showMensaje('info', 'Mensaje', 'Se editó correctamente');
                     this.fDisplayDialogEdit(null);
-                    this.talleristaSeleccionado = new Tallerista();
-                    this.talleristaService.obtenerTodo().then(res => this.talleristaList = res);
+                    this.operadorSeleccionado = new Operador();
+                    this.operadoresService.obtenerTodo().then(res => this.operadoresList = res);
                 },
                 err => {
-                    this.showMensaje('error', 'Alerta', 'Ocurrió un errro al intentar editar');
+                    this.showMensaje('error', 'Mensaje', 'Ocurrió un error al intentar editar');
                 }
-            )
+            );
         } catch (error) {
-            this.showMensaje('warn', 'Alerta', 'No se pudo guardar el Tallerista, es posible que falte un campo por llenar');
+            this.showMensaje('warn', 'Mensaje', 'No se pudo editar');
         }
     }
 
-    confirmDelete(tallerista: Tallerista) {
+    confirmDelete(operador: Operador) {
         this.confirmationService.confirm({
-            message: `Los datos no podrán ser restaurados ¿Desea eliminar el taller: ${tallerista.talleristanombre} ?`,
+            message: `Los datos no podrán ser restaurados ¿Desea eliminar el operador: ${operador.nombreoperador} ?`,
             acceptLabel: 'Sí',
             acceptButtonStyleClass: 'p-button-primary',
             rejectButtonStyleClass: 'p-button-secondary',
             defaultFocus: 'reject',
             accept: () => {
-                this.talleristaService.eliminar(tallerista.idtallerista).subscribe(res => {
+                this.operadoresService.eliminar(operador.idoperador).subscribe(res => {
                     this.showMensaje('success', 'Mensaje', 'Se eliminó correctamente.');
-                    this.talleristaService.obtenerTodo().then(res => this.talleristaList = res);
+                    this.operadoresService.obtenerTodo().then(res => this.operadoresList = res);
                 });
             }
         });
-    }
+    }   
 
     fDisplayDialogAdd() {
         this.displayDialogAdd = !this.displayDialogAdd;
     }
 
-    fDisplayDialogEdit(tallerista) {
-        this.talleristaSeleccionado = tallerista;
+    fDisplayDialogEdit(operador: Operador) {
+        this.operadorSeleccionado = operador;
         this.displayDialogEdit = !this.displayDialogEdit;
     }
 
@@ -107,18 +104,18 @@ export class TalleristasComponent implements OnInit {
         import("jspdf").then(jsPDF => {
             import("jspdf-autotable").then(x => {
                 const doc = new jsPDF.default(0, 0);
-                doc.autoTable(this.exportColumns, this.talleristaList);
-                doc.save('tallerista.pdf');
+                doc.autoTable(this.exportColumns, this.operadoresList);
+                doc.save('operadores.pdf');
             })
         })
     }
 
     exportExcel() {
         import("xlsx").then(xlsx => {
-            const worksheet = xlsx.utils.json_to_sheet(this.talleristaList);
+            const worksheet = xlsx.utils.json_to_sheet(this.operadoresList);
             const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
             const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-            this.saveAsExcelFile(excelBuffer, "talleristas");
+            this.saveAsExcelFile(excelBuffer, "operadores");
         });
     }
 
@@ -133,11 +130,9 @@ export class TalleristasComponent implements OnInit {
         });
     }
 
+
     showMensaje(severity, summary, details) {
         this.messageService.add({ severity: severity, summary: summary, detail: details });
     }
 
-    isAdmin() {
-        return this.authService.isAdmin();
-    }
 }

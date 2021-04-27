@@ -4,6 +4,7 @@ import { Estudiante } from '../../../models/Estudiante';
 import { EstudianteService } from '../../../services/estudiante.service';
 import { Paquetes } from '../../../models/Paquetes';
 import { PaquetesService } from '../../../services/paquetes.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-estudiantes',
@@ -31,6 +32,7 @@ export class EstudiantesComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private estudianteService: EstudianteService,
         private paquetesService: PaquetesService,
+        private authService: AuthService
     ) { }
 
     ngOnInit(): void {
@@ -146,4 +148,7 @@ export class EstudiantesComponent implements OnInit {
         this.messageService.add({ severity: severity, summary: summary, detail: details });
     }
 
+    isAdmin() {
+        return this.authService.isAdmin();
+    }
 }

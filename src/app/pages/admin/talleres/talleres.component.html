@@ -68,7 +68,6 @@
             </ng-template>
             <ng-template pTemplate="body" let-taller>
                 <tr>
-                    <!-- <td>{{evento.ideventos}}</td> -->
                     <td>{{taller.nombretalleres}}</td>
                     <td>{{taller.descripciontaller}}</td>
                     <td>{{taller.requerimientostaller}}</td>
@@ -78,11 +77,11 @@
                     <td>{{taller.nombreevento}}</td>
                     <td>{{taller.talleristanombre}}</td>
                     <td>
-                        <button type="button" class="p-button-rounded p-button-info" pButton
+                        <button type="button" class="p-button-rounded p-button-info" pButton [disabled]="!isAdmin()"
                             (click)="fDisplayDialogEdit(taller)" icon="pi pi-pencil">
                         </button>
 
-                        <button type="button" class="p-button-rounded p-button-warning" pButton
+                        <button type="button" class="p-button-rounded p-button-warning" pButton [disabled]="!isAdmin()"
                             (click)="confirmDelete(taller)" icon="pi pi-trash">
                         </button>
                     </td>

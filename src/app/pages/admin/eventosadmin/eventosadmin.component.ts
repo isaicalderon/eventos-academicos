@@ -5,6 +5,7 @@ import { ConfirmationService } from 'primeng/api';
 import { Moment } from "moment";
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-eventosadmin',
@@ -32,9 +33,10 @@ export class EventosadminComponent implements OnInit {
     es: any;
 
     constructor(
-        private eventosService: EventosService,
+        private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private messageService: MessageService
+        private eventosService: EventosService,
+        private authService: AuthService
     ) { }
 
     ngOnInit(): void {
@@ -49,12 +51,7 @@ export class EventosadminComponent implements OnInit {
             clear: 'Borrar'
         };
 
-        this.eventosService.obtenerEventos().then(
-            res => {
-                this.eventosList = res;
-                console.log(this.eventosList);
-            }
-        );
+        this.eventosService.obtenerEventos().then(res => this.eventosList = res);
 
         this.cols = [
             { field: 'nombreevento', header: 'Nombre' },
@@ -183,6 +180,10 @@ export class EventosadminComponent implements OnInit {
 
     showMensaje(severity, summary, details) {
         this.messageService.add({ severity: severity, summary: summary, detail: details });
+    }
+
+    isAdmin() {
+        return this.authService.isAdmin();
     }
 
 }

@@ -5,34 +5,49 @@ import { Router } from '@angular/router';
 
 const header = {
     headers: new HttpHeaders({
-      'Content-Type':  'application/json'
+        'Content-Type': 'application/json'
     })
 };
 
-@Injectable({providedIn:'root'})
-export class AuthService{
+@Injectable({ providedIn: 'root' })
+export class AuthService {
 
-    private loginUrl = "http://localhost:3000/api/login"
-    
+    _loginAdmin = "http://localhost:3000/api/login"
+    _loginOperador = "http://localhost:3000/api/loginOperador"
+
     constructor(
         private http: HttpClient,
         private router: Router
     ) { }
 
-
-    loginAdmin(admin: Admin){
-        return this.http.post(this.loginUrl, admin, header);
+    loginAdmin(admin: Admin) {
+        return this.http.post(this._loginAdmin, admin, header);
     }
 
-    loggedIn(){
+    loginOperador(admin: Admin) {
+        return this.http.post(this._loginOperador, admin, header);
+    }
+
+    loggedIn() {
         return !!localStorage.getItem('token');
     }
 
-    getToken(){
+    getToken() {
         return localStorage.getItem('token');
     }
 
-    logout(){
+    isAdmin() {
+        let isAdmin = localStorage.getItem('isAdmin');
+        // console.log(isAdmin);
+        
+        if (isAdmin == 'true') {
+            return true;
+        }
+
+        return false;
+    }
+
+    logout() {
         localStorage.removeItem('token');
         this.router.navigate(['/']);
     }

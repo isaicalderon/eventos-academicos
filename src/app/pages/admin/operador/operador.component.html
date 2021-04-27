@@ -1,0 +1,119 @@
+<app-navbar-admin></app-navbar-admin>
+<p-toast></p-toast>
+
+
+<section class="p-3 my-container">
+
+    <h1 class="text-center">Operadores</h1>
+
+    <div class="mb-3">
+        <!--Boton de registro-->
+        <button type="button" class="btn btn-primary" (click)="fDisplayDialogAdd()">
+            Nuevo
+        </button>
+    </div>
+
+    <p-table #dt1 [value]="operadoresList" dataKey="idvisitas" styleClass="p-datatable-sm p-datatable-responsive-demo"
+        [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]"
+        [globalFilterFields]="['usernameoperador','passwordoperador','nombreoperador']">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex">
+                <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                    class="p-button-success p-mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+                <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                    class="p-button-warning p-mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+                <span class="p-input-icon-left p-ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Búsqueda general" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="usernameoperador"> Username operador
+                    <p-sortIcon field="usernameoperador"></p-sortIcon>
+                </th>
+                <th pSortableColumn="passwordoperador"> Contraseña operador
+                    <p-sortIcon field="passwordoperador"></p-sortIcon>
+                </th>
+                <th pSortableColumn="nombreoperador"> Nombre Operador
+                    <p-sortIcon field="nombreoperador"></p-sortIcon>
+                </th>
+                <th style="width: 120px;">Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-operador>
+            <tr>
+                <td>{{operador.usernameoperador}}</td>
+                <td>{{operador.passwordoperador}}</td>
+                <td>{{operador.nombreoperador}}</td>
+                <td>
+                    <button pButton class="p-button-rounded" icon="pi pi-pencil"
+                        (click)="fDisplayDialogEdit(operador)"></button>
+                    <button pButton class="p-button-rounded p-button-warning" icon="pi pi-trash"
+                        (click)="confirmDelete(operador)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</section>
+
+
+<p-dialog header="Registrar Operador" [(visible)]="displayDialogAdd" [modal]="true" [style]="{width: '40vw'}">
+    <div class="p-fluid p-2 pt-3">
+        <div class="p-field">
+            <label for="">Username Operador</label>
+            <input type="text" pInputText [(ngModel)]="operadorNew.usernameoperador">
+        </div>
+
+        <div class="p-field">
+            <label for="">Nombre completo Operador</label>
+            <input type="text" pInputText [(ngModel)]="operadorNew.nombreoperador">
+        </div>
+
+        <div class="p-field">
+            <label for="">Contraseña operador</label>
+            <input type="text" pInputText [(ngModel)]="operadorNew.passwordoperador">
+        </div>
+
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" label="Cerrar" (click)="fDisplayDialogAdd()" styleClass="p-button-secondary">
+        </p-button>
+        <p-button icon="pi pi-check" label="Guardar" (click)="guardarOperador()" styleClass="p-button-primary">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Editar Visita" [(visible)]="displayDialogEdit" [modal]="true" [style]="{width: '40vw'}">
+    <div class="p-fluid p-2 pt-3">
+        <div class="p-field">
+            <label for="">Username Operador</label>
+            <input type="text" pInputText [(ngModel)]="operadorSeleccionado.usernameoperador">
+        </div>
+
+        <div class="p-field">
+            <label for="">Nombre completo Operador</label>
+            <input type="text" pInputText [(ngModel)]="operadorSeleccionado.nombreoperador">
+        </div>
+
+        <div class="p-field">
+            <label for="">Contraseña operador</label>
+            <input type="text" pInputText [(ngModel)]="operadorSeleccionado.passwordoperador">
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-times" label="Cerrar" (click)="displayDialogEdit = false" styleClass="p-button-secondary">
+        </p-button>
+        <p-button icon="pi pi-check" label="Guardar" (click)="editarOperador()" styleClass="p-button-primary">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<!-- Dialogo de confirmación -->
+<p-confirmDialog class="p-5" header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Conferencista } from '../../../models/Conferencista';
 import { ConferencistaService } from '../../../services/conferencista.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-conferencista',
@@ -26,7 +27,8 @@ export class ConferencistaComponent implements OnInit {
     constructor(
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private conferencistaService: ConferencistaService
+        private conferencistaService: ConferencistaService,
+        private authService: AuthService
     ) { }
 
     ngOnInit(): void {
@@ -143,5 +145,8 @@ export class ConferencistaComponent implements OnInit {
     showMensaje(severity, summary, details) {
         this.messageService.add({ severity: severity, summary: summary, detail: details });
     }
-
+    
+    isAdmin() {
+        return this.authService.isAdmin();
+    }
 }

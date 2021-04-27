@@ -7,6 +7,7 @@ import { EventosService } from 'src/app/services/eventos.service';
 import { TalleresService } from 'src/app/services/talleres.service';
 import { TalleristasService } from '../../../services/talleristas.service';
 import { Tallerista } from 'src/app/models/Tallerista';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-talleres',
@@ -38,7 +39,8 @@ export class TalleresComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private talleresService: TalleresService,
         private eventosService: EventosService,
-        private talleristasService: TalleristasService
+        private talleristasService: TalleristasService,
+        private authService: AuthService
     ) { }
 
     ngOnInit(): void {
@@ -175,5 +177,9 @@ export class TalleresComponent implements OnInit {
 
     showMensaje(severity, summary, details) {
         this.messageService.add({ severity: severity, summary: summary, detail: details });
+    }
+
+    isAdmin() {
+        return this.authService.isAdmin();
     }
 }

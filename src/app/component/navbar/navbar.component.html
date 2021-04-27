@@ -15,7 +15,7 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-1">
                 <li class="nav-item" *ngIf="!verifyLogin()">
                     <label class="nav-link text-white" href="#" (click)="fDisplayDialogLogin()">Iniciar
-                        Sesion</label>
+                        sesión</label>
                 </li>
                 <li class="nav-item" *ngIf="verifyLogin()">
                     <a class="nav-link text-white" href="#" (click)="logout()">
@@ -42,6 +42,11 @@
             <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
                 [(ngModel)]="adminLogin.administradorPassword">
             <label for="floatingPassword">Password</label>
+        </div>
+        <br>
+        <div class="p-field">
+            <label for="">Administrador</label> <br>
+            <p-inputSwitch [(ngModel)]="checkAdmin"></p-inputSwitch>
         </div>
     </div>
 

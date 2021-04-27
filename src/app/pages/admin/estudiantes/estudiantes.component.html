@@ -59,9 +59,9 @@
                     <td>{{estudiante.correoestudiantes}}</td>
                     <td>{{estudiante.descripcionpaquete}}</td>
                     <td>
-                        <button type="button" pButton class="p-button-rounded p-button-info"
+                        <button type="button" pButton class="p-button-rounded p-button-info" [disabled]="!isAdmin()"
                             (click)="fDisplayDialogEdit(estudiante)" icon="pi pi-pencil"></button>
-                        <button type="button" pButton class="p-button-rounded p-button-warning"
+                        <button type="button" pButton class="p-button-rounded p-button-warning" [disabled]="!isAdmin()"
                             (click)="confirmDelete(estudiante)" icon=" pi pi-trash"></button>
                     </td>
                 </tr>
