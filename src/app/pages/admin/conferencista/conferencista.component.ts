@@ -34,18 +34,17 @@ export class ConferencistaComponent implements OnInit {
     ngOnInit(): void {
         this.conferencistaService.obtenerLista().then(res => this.conferencistasList = res);
 
-        this.sexoList = [
-            { value: 'Masculino' },
-            { value: 'Femenino' }
-        ];
+        // this.sexoList = [
+        //     { value: 'Masculino' },
+        //     { value: 'Femenino' }
+        // ];
 
         this.cols = [
             { field: 'conferencistanombre', header: 'Nombre Conferencista' },
-            { field: 'conferencistacorreo', header: 'Correo COnferencista' },
+            { field: 'conferencistacorreo', header: 'Correo Conferencista' },
             { field: 'conferencistatelefono', header: 'Telefono' },
             { field: 'conferencistaprofesion', header: 'Profesión' },
-            { field: 'conferencistasexo', header: 'Sexo Conferencista' },
-            { field: 'conferencistaedad', header: 'Edad Conferencista' }
+            { field: 'conferencistacurriculo', header: 'Curriculo' }
         ];
 
         this.exportColumns = this.cols.map(col => ({ title: col.header, dataKey: col.field }));

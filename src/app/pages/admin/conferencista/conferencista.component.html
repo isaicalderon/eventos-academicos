@@ -18,7 +18,7 @@
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
         [rowsPerPageOptions]="[10,25,50]"
-        [globalFilterFields]="['conferencistanombre','conferencistacorreo','conferencistatelefono','conferencistaprofesion','conferencistaedad','conferencistasexo']">
+        [globalFilterFields]="['conferencistanombre','conferencistacorreo','conferencistatelefono','conferencistaprofesion','conferencistacurriculo']">
         <ng-template pTemplate="caption">
             <div class="p-d-flex">
                 <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
@@ -46,11 +46,8 @@
                 <th pSortableColumn="conferencistaprofesion"> Profesión
                     <p-sortIcon field="conferencistaprofesion"></p-sortIcon>
                 </th>
-                <th pSortableColumn="conferencistaedad"> Edad
-                    <p-sortIcon field="conferencistaedad"></p-sortIcon>
-                </th>
-                <th pSortableColumn="conferencistasexo"> Sexo
-                    <p-sortIcon field="conferencistasexo"></p-sortIcon>
+                <th pSortableColumn="conferencistacurriculo"> Curriculo
+                    <p-sortIcon field="conferencistacurriculo"></p-sortIcon>
                 </th>
                 <th style="width: 120px;">Opciones</th>
             </tr>
@@ -61,8 +58,8 @@
                 <td>{{confe.conferencistacorreo}}</td>
                 <td>{{confe.conferencistatelefono}}</td>
                 <td>{{confe.conferencistaprofesion}}</td>
-                <td>{{confe.conferencistaedad}}</td>
-                <td>{{confe.conferencistasexo}}</td>
+                <td>{{confe.conferencistacurriculo}}</td>
+
                 <td>
                     <button pButton class="p-button-rounded" icon="pi pi-pencil" [disabled]="!isAdmin()"
                         (click)="fDisplayDialogEdit(confe)"></button>
@@ -83,22 +80,18 @@
             <label for="">Nombre conferencista</label>
             <input type="text" pInputText [(ngModel)]="conferencistaNew.conferencistanombre">
         </div>
+
         <div class="p-field">
             <label for="">Correo conferencista</label>
             <input type="text" pInputText [(ngModel)]="conferencistaNew.conferencistacorreo">
         </div>
+
         <div class="p-field">
-            <label for="">Edad conferencista</label>
-            <p-inputNumber [(ngModel)]="conferencistaNew.conferencistaedad" mode="decimal" [showButtons]="true"
-                [min]="0" [max]="100">
-            </p-inputNumber>
+            <label for="">Curriculo conferencista</label>
+            <textarea pInputTextarea [(ngModel)]="conferencistaNew.conferencistacurriculo" rows="2"
+                cols="20"></textarea>
         </div>
-        <div class="p-field">
-            <label for="">Sexo conferencista</label>
-            <p-dropdown [options]="sexoList" [(ngModel)]="conferencistaNew.conferencistasexo" optionLabel="value"
-                placeholder="Selecciona un valor">
-            </p-dropdown>
-        </div>
+
         <div class="p-field">
             <label for="">Profesión conferencista</label>
             <input type="text" pInputText [(ngModel)]="conferencistaNew.conferencistaprofesion">
@@ -125,25 +118,21 @@
             <label for="">Nombre conferencista</label>
             <input type="text" pInputText [(ngModel)]="conferencistaSeleccionado.conferencistanombre">
         </div>
+
         <div class="p-field">
             <label for="">Correo conferencista</label>
             <input type="text" pInputText [(ngModel)]="conferencistaSeleccionado.conferencistacorreo">
         </div>
-        <div class="p-field">
-            <label for="">Edad conferencista</label>
-            <p-inputNumber [(ngModel)]="conferencistaSeleccionado.conferencistaedad" mode="decimal" [showButtons]="true"
-                [min]="0" [max]="100">
-            </p-inputNumber>
-        </div>
-        <div class="p-field">
-            <label for="">Sexo conferencista</label>
-            <p-dropdown [options]="sexoList" [(ngModel)]="conferencistaSeleccionado.conferencistasexo"
-                optionLabel="value" placeholder="Selecciona un valor">
-            </p-dropdown>
-        </div>
+
         <div class="p-field">
             <label for="">Profesión conferencista</label>
             <input type="text" pInputText [(ngModel)]="conferencistaSeleccionado.conferencistaprofesion">
+        </div>
+
+        <div class="p-field">
+            <label for="">Curriculo conferencista</label>
+            <textarea pInputTextarea [(ngModel)]="conferencistaSeleccionado.conferencistacurriculo" rows="2"
+                cols="20"></textarea>
         </div>
 
         <div class="p-field">
