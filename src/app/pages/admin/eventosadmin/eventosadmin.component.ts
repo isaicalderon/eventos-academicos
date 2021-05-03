@@ -66,6 +66,17 @@ export class EventosadminComponent implements OnInit {
 
     guardarEvento() {
         try {
+            /* código para fixear la horá porque se buggea al subir y se suman 7 horas más */
+            // Sí la fecha se registrá diferente (osea bien) comentar estas lineas de código 
+            // let hourFix = this.eventoNew.fechainicioevento.getHours() - 7;
+            // this.eventoNew.fechainicioevento.setHours(hourFix);
+            // hourFix = this.eventoNew.fechafinEvento.getHours() - 7;
+            // this.eventoNew.fechafinEvento.setHours(hourFix);
+            /* fin fix */
+
+            this.eventoNew.fechainicioevento_ts = this.eventoNew.fechainicioevento.getTime() + "";
+            this.eventoNew.fechafinevento_ts = this.eventoNew.fechafinevento.getTime() + "";
+
             this.eventosService.guardarEvento(this.eventoNew).subscribe(
                 res => {
                     this.showMensaje('success', 'Mensaje', 'Se creó correctamente.');
@@ -82,9 +93,36 @@ export class EventosadminComponent implements OnInit {
         }
     }
 
+    editarEvento() {
+        // console.log(this.fecha1);
+
+        this.eventoSeleccionado.fechainicioevento = this.fecha1;
+        this.eventoSeleccionado.fechafinevento = this.fecha2;
+
+        /* código para fixear la horá porque se buggea al subir y se suman 7 horas más */
+        // Sí la fecha se registrá diferente (osea bien) comentar estas lineas de código 
+        // let hourFix = this.eventoSeleccionado.fechainicioevento.getHours() - 7;
+        // this.eventoSeleccionado.fechainicioevento.setHours(hourFix);
+        // hourFix = this.eventoSeleccionado.fechafinevento.getHours() - 7;
+        // this.eventoSeleccionado.fechafinevento.setHours(hourFix);
+        /* fin fix */
+
+        this.eventoSeleccionado.fechainicioevento_ts = this.eventoSeleccionado.fechainicioevento.getTime() + "";
+        this.eventoSeleccionado.fechafinevento_ts = this.eventoSeleccionado.fechafinevento.getTime() + "";
+        
+        this.eventosService.editarEvento(this.eventoSeleccionado).subscribe(res => {
+            this.showMensaje('success', 'Mensaje', 'Se guardó correctamente.');
+            this.eventosService.obtenerEventos().then(res => this.eventosList = res);
+            this.displayEditDialog = false;
+            this.eventoSeleccionado = new Eventos();
+        });
+    }
+
     formatDate(date) {
         moment.locale('es');
-        return moment(date).format('DD/MM/yy h:mm:ss a');
+        var date2 = new Date(date * 1);
+        // return date2.toLocaleString();
+        return moment(date2).format('DD/MM/yy h:mm:ss a');
     }
 
     exportPdf() {
@@ -124,7 +162,6 @@ export class EventosadminComponent implements OnInit {
     confirmDelete(evento: any) {
         try {
 
-
             this.confirmationService.confirm({
                 message: `Los datos no podrán ser restaurados ¿Desea Eliminar el evento: ${evento.nombreevento} ?`,
                 acceptLabel: 'Sí',
@@ -148,35 +185,19 @@ export class EventosadminComponent implements OnInit {
         }
     }
 
-    fDisplayEditDialog(eventoSeleccionado) {
-
-        this.fecha1 = this.eventoSeleccionado.fechainicioevento;
-        this.fecha2 = this.eventoSeleccionado.fechafinEvento;
-
+    fDisplayEditDialog(eventoSeleccionado: any) {
         this.eventoSeleccionado = eventoSeleccionado;
+
+        let unixI: number = eventoSeleccionado.fechainicioevento_ts * 1;
+        let unixF: number = eventoSeleccionado.fechafinevento_ts * 1;
+        
+        this.fecha1 = new Date(unixI * 1);
+        this.fecha2 = new Date(unixF * 1);
+ 
         this.displayEditDialog = !this.displayEditDialog;
     }
 
-    editarEvento() {
-        console.log(this.fecha1);
-        this.eventoSeleccionado.fechainicioevento = this.fecha1;
-        this.eventoSeleccionado.fechafinEvento = this.fecha2;
 
-        /* código para fixear la horá porque se buggea al subir y se suman 7 horas más */
-        // Sí la fecha se registrá diferente (osea bien) comentar estas lineas de código 
-        let hourFix = this.eventoSeleccionado.fechainicioevento.getHours() - 7;
-        this.eventoSeleccionado.fechainicioevento.setHours(hourFix);
-        hourFix = this.eventoSeleccionado.fechafinEvento.getHours() - 7;
-        this.eventoSeleccionado.fechafinEvento.setHours(hourFix);
-        /* fin fix */
-
-        this.eventosService.editarEvento(this.eventoSeleccionado).subscribe(res => {
-            this.showMensaje('success', 'Mensaje', 'Se guardó correctamente.');
-            this.eventosService.obtenerEventos().then(res => this.eventosList = res);
-            this.displayEditDialog = false;
-            this.eventoSeleccionado = new Eventos();
-        });
-    }
 
     showMensaje(severity, summary, details) {
         this.messageService.add({ severity: severity, summary: summary, detail: details });

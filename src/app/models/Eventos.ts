@@ -5,9 +5,11 @@ export class Eventos {
     descripcionevento: string;
     eventosmaxparticipantes: number;
     fechainicioevento: Date;
-    fechafinEvento: Date;
+    fechafinevento: Date;
     idconferencias: number;
     idtalleres: number;
+    fechainicioevento_ts: string;
+    fechafinevento_ts: string;
 
     constructor(){
         // this.fechaInicioEvento = new Date();

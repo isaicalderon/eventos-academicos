@@ -37,7 +37,7 @@
                     <!-- <th pSortableColumn="ideventos">Id <p-sortIcon field="ideventos"></p-sortIcon></th> -->
                     <th pSortableColumn="nombreevento">Nombre <p-sortIcon field="nombreevento"></p-sortIcon>
                     </th>
-                    <th style="width: 500px;" pSortableColumn="descripcionevento">Descripción <p-sortIcon
+                    <th style="width: 450px;" pSortableColumn="descripcionevento">Descripción <p-sortIcon
                             field="descripcionevento">
                         </p-sortIcon>
                     </th>
@@ -49,7 +49,7 @@
                     </th>
                     <th pSortableColumn="fechafinEvento">Fecha final <p-sortIcon field="fechafinEvento"></p-sortIcon>
                     </th>
-                    <th>Estado</th>
+                    <th style="width: 120px;">Estado</th>
                     <th style="width: 120px;">Opciones</th>
                 </tr>
             </ng-template>
@@ -59,19 +59,18 @@
                     <td>{{evento.nombreevento}}</td>
                     <td>{{evento.descripcionevento}}</td>
                     <td>{{evento.eventosmaxparticipantes}}</td>
-                    <td>{{formatDate(evento.fechainicioevento)}}
-                    </td>
-                    <td>{{formatDate(evento.fechafinEvento)}}</td>
+                    <td>{{formatDate(evento.fechainicioevento_ts)}}</td>
+                    <td>{{formatDate(evento.fechafinevento_ts)}}</td>
 
-                    <td>activo</td>
                     <td>
-                        <button type="button" class="p-button-rounded p-button-info" pButton
-                            [disabled]="!isAdmin()"
+                        <span [class]="'customer-badge status-new'">ACTIVO</span></td>
+
+                    <td>
+                        <button type="button" class="p-button-rounded p-button-info" pButton [disabled]="!isAdmin()"
                             (click)="fDisplayEditDialog(evento)" icon="pi pi-pencil">
                         </button>
-                        
-                        <button type="button" class="p-button-rounded p-button-warning" pButton
-                            [disabled]="!isAdmin()"
+
+                        <button type="button" class="p-button-rounded p-button-warning" pButton [disabled]="!isAdmin()"
                             (click)="confirmDelete(evento)" icon="pi pi-trash">
                         </button>
                     </td>
@@ -109,11 +108,11 @@
             <!--Fecha final-->
             <div class="p-field">
                 <label for="">Fecha final</label>
-                <p-calendar appendTo="body" [(ngModel)]="eventoNew.fechafinEvento" [showTime]="true" [locale]="es"
+                <p-calendar appendTo="body" [(ngModel)]="eventoNew.fechafinevento" [showTime]="true" [locale]="es"
                     hourFormat="24" dateFormat="dd/mm/yy"></p-calendar>
             </div>
         </div>
-        
+
         <ng-template pTemplate="footer">
             <p-button icon="pi pi-check" (click)="guardarEvento()" label="Guardar" styleClass="p-button-primary">
             </p-button>

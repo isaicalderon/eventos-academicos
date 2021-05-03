@@ -89,4 +89,16 @@ button.calendar, button.calendar:active {
    }
 }
 
+.customer-badge {
+    border-radius: 2px;
+    padding: .25em .5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
+}
 
+.customer-badge.status-new{
+    background-color: #b3e5fc;
+    color: #23547b;
+}
