@@ -3,6 +3,7 @@ export class Eventos {
     ideventos: number;
     nombreevento: string;
     descripcionevento: string;
+    participantesevento: number;
     eventosmaxparticipantes: number;
     fechainicioevento: Date;
     fechafinevento: Date;

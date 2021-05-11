@@ -10,5 +10,11 @@ export class Paquetes {
     idevento: number;
     nombreevento: string;
 
+    descripcionPaqueteEvento: string;
+    
+    constructor(){
+        this.descripcionPaqueteEvento = this.descripcionpaquete+" - "+this.nombreevento;
+    }
+
 
 }

@@ -109,7 +109,7 @@ export class EventosadminComponent implements OnInit {
 
         this.eventoSeleccionado.fechainicioevento_ts = this.eventoSeleccionado.fechainicioevento.getTime() + "";
         this.eventoSeleccionado.fechafinevento_ts = this.eventoSeleccionado.fechafinevento.getTime() + "";
-        
+
         this.eventosService.editarEvento(this.eventoSeleccionado).subscribe(res => {
             this.showMensaje('success', 'Mensaje', 'Se guardó correctamente.');
             this.eventosService.obtenerEventos().then(res => this.eventosList = res);
@@ -122,7 +122,7 @@ export class EventosadminComponent implements OnInit {
         moment.locale('es');
         var date2 = new Date(date * 1);
         // return date2.toLocaleString();
-        return moment(date2).format('DD/MM/yy h:mm:ss a');
+        return moment(date2).format('DD/MM/yy h:mm:s a');
     }
 
     exportPdf() {
@@ -190,10 +190,10 @@ export class EventosadminComponent implements OnInit {
 
         let unixI: number = eventoSeleccionado.fechainicioevento_ts * 1;
         let unixF: number = eventoSeleccionado.fechafinevento_ts * 1;
-        
+
         this.fecha1 = new Date(unixI * 1);
         this.fecha2 = new Date(unixF * 1);
- 
+
         this.displayEditDialog = !this.displayEditDialog;
     }
 
@@ -205,6 +205,28 @@ export class EventosadminComponent implements OnInit {
 
     isAdmin() {
         return this.authService.isAdmin();
+    }
+
+    verificarEstado(evento: Eventos) {
+        let fechaActual = new Date();
+        let currentTimestamp: number = fechaActual.getTime();
+        let eventoTimestampInicial: number = parseInt(evento.fechainicioevento_ts);
+        let eventoTimestampFinal: number = parseInt(evento.fechafinevento_ts);
+
+
+        if (currentTimestamp < eventoTimestampFinal) {
+            if (currentTimestamp > eventoTimestampInicial) {
+                return "iniciado";
+            }else{
+                // un calculo mas
+            }
+        } else {
+            return "finalizado";
+        }
+
+
+
+        return "activo";
     }
 
 }
