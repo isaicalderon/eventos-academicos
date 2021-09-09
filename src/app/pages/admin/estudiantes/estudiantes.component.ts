@@ -151,4 +151,19 @@ export class EstudiantesComponent implements OnInit {
     isAdmin() {
         return this.authService.isAdmin();
     }
+
+    generarPassword(){
+        let lenghtX = 5;
+		let characters: string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		let charactersLength: number = characters.length;
+		let randomString = '';
+        
+        for (var i = 0; i < lenghtX; i++) {
+			randomString += characters[ Math.floor(Math.random() * (charactersLength - 1))];
+		}
+
+		this.estudianteNew.passwordestudiante = randomString;
+	}
+
+
 }

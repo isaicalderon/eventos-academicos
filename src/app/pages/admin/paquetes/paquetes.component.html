@@ -34,8 +34,11 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="descripcionpaquete"> Descripción Paquete
+                <th pSortableColumn="descripcionpaquete"> Nombre Paquete
                     <p-sortIcon field="descripcionpaquete"></p-sortIcon>
+                </th>
+                <th pSortableColumn="contenidopaquete"> Contenido Paquete
+                    <p-sortIcon field="contenidopaquete"></p-sortIcon>
                 </th>
                 <th pSortableColumn="tipopaquetes"> Tipo Paquete
                     <p-sortIcon field="tipopaquetes"></p-sortIcon>
@@ -52,6 +55,7 @@
         <ng-template pTemplate="body" let-paquete>
             <tr>
                 <td>{{paquete.descripcionpaquete}}</td>
+                <td>{{paquete.contenidopaquete}}</td>
                 <td>{{paquete.tipopaquetes}}</td>
                 <td>{{paquete.costopaquete}}</td>
                 <td>{{paquete.nombreevento}}</td>
@@ -73,13 +77,21 @@
 <p-dialog header="Registrar Paquete" [(visible)]="displayDialogAdd" [modal]="true" [style]="{width: '40vw'}">
     <div class="p-fluid p-2 pt-3">
         <div class="p-field">
-            <label for="">Descripción paquete</label>
+            <label for="">Nombre paquete</label>
             <input type="text" pInputText [(ngModel)]="paqueteNew.descripcionpaquete">
         </div>
+
+        <div class="p-field">
+            <label for="">Contenido paquete</label>
+            <textarea pInputTextarea [(ngModel)]="paqueteNew.contenidopaquete" rows="5"></textarea>
+        </div>
+
         <div class="p-field">
             <label for="">Tipo Paquete</label>
-            <input type="text" pInputText [(ngModel)]="paqueteNew.tipopaquetes">
+            <p-dropdown [options]="paquetes" [(ngModel)]="paqueteSelected" optionLabel="nombre"
+                placeholder="Selecciona un paquete"></p-dropdown>
         </div>
+
         <div class="p-field">
             <label for="">Costo Paquete</label>
             <input type="text" pInputText [(ngModel)]="paqueteNew.costopaquete">
@@ -103,12 +115,17 @@
 <p-dialog header="Editar Paquete" [(visible)]="displayDialogEdit" [modal]="true" [style]="{width: '40vw'}">
     <div class="p-fluid p-2 pt-3">
         <div class="p-field">
-            <label for="">Descripción paquete</label>
+            <label for="">Nombre paquete</label>
             <input type="text" pInputText [(ngModel)]="paqueteSeleccionado.descripcionpaquete">
         </div>
         <div class="p-field">
+            <label for="">Contenido paquete</label>
+            <textarea pInputTextarea [(ngModel)]="paqueteSeleccionado.contenidopaquete" rows="5"></textarea>
+        </div>
+        <div class="p-field">
             <label for="">Tipo Paquete</label>
-            <input type="text" pInputText [(ngModel)]="paqueteSeleccionado.tipopaquetes">
+            <p-dropdown [options]="paquetes" [(ngModel)]="paqueteSelected" optionLabel="nombre"
+                placeholder="Selecciona un paquete"></p-dropdown>
         </div>
         <div class="p-field">
             <label for="">Costo Paquete</label>

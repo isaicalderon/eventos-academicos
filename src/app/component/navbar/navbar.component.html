@@ -4,7 +4,8 @@
         <a class="navbar-brand " href="#">
             <img src="/assets/img/logoBlanco.png" alt="Logo Itesca" height="40">
         </a>
-        <button *ngIf="verifyLogin()" class="btn btn-primary" type="button" (click)='activeAdminNav(true)'>
+        <button *ngIf="verifyAdmin() || verifyOperador()" class="btn btn-primary" type="button"
+            (click)='activeAdminNav(true)'>
             <i class="fas fa-bars"></i> Menú
         </button>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -13,22 +14,64 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-1">
-                <li class="nav-item" *ngIf="!verifyLogin()">
-                    <label class="nav-link text-white" href="#" (click)="fDisplayDialogLogin()">Iniciar
-                        sesión</label>
+                <li class="nav-item" *ngIf="!verifyLogin()" style="cursor: pointer;">
+                    <label class="nav-link text-white" style="cursor: pointer;"
+                        (click)="fDisplayDialogLoginEst()">Estudiante</label>
                 </li>
-                <li class="nav-item" *ngIf="verifyLogin()">
+                <li class="nav-item" *ngIf="!verifyLogin()">
+                    <label class="nav-link text-white" style="cursor: pointer;"
+                        (click)="fDisplayDialogLogin()">Operador</label>
+                </li>
+                <!-- <li class="nav-item" *ngIf="verifyLogin()">
                     <a class="nav-link text-white" href="#" (click)="logout()">
                         Cerrar Sesion</a>
                 </li>
+                 -->
+
             </ul>
+
+            <button *ngIf="verifyLogin()" class="btn bg-color-01" type="button" (click)="displaySidebarOnLogin()">
+                <i class="fas fa-bars"></i> Menú
+            </button>
+
         </div>
     </div>
 </nav>
 
+<p-sidebar [(visible)]="displaySidebarEstudiante" position="right" [showCloseIcon]="true">
+    <div class="sidebar-info">
+        <img src="/assets/img/noimage.jpg">
+        <label>{{estudianteLogin.nombreestudiantes}} {{estudianteLogin.apellidosestudiante}}</label>
+        <span>{{estudianteLogin.correoestudiantes}}</span>
+    </div>
 
-<p-dialog header="Iniciar sesión" [(visible)]="displayDialogLogin" position="top" [modal]="true"
-    [style]="{width: '25vw'}" [draggable]="false" [resizable]="false">
+    <ul class="sidebar-nav">
+        <li>
+            <a href="#" [routerLink]="['estudiante/dashboard']" (click)="displaySidebarEstudiante = false">Perfil</a>
+        </li>
+        <li>
+            <a href="#" [routerLink]="['estudiante/pagos']" (click)="displaySidebarEstudiante = false">Pagos</a>
+        </li>
+        <hr />
+        <li>
+            <a href="#" (click)="displaySidebarEstudiante = false">Contacto</a>
+        </li>
+        <li>
+            <a href="#" (click)="displaySidebarEstudiante = false">Privacidad</a>
+        </li>
+        <li>
+            <a href="#" (click)="displaySidebarEstudiante = false">Términos y condiciones</a>
+        </li>
+
+        <hr />
+        <li>
+            <a href="#" (click)="logout()">Cerrar sesión</a>
+        </li>
+    </ul>
+</p-sidebar>
+
+<p-dialog header="Operador" [(visible)]="displayDialogLogin" position="top" [modal]="true" [style]="{width: '25vw'}"
+    [draggable]="false" [resizable]="false">
     <div class="p-fluid p-2 pt-3">
         <div *ngIf="loginAuthError" class="alert alert-warning" role="alert">
             Usuario o contraseña inválido.
@@ -55,6 +98,36 @@
             styleClass="p-button-secondary">
         </p-button>
         <p-button icon="pi pi-user" label="Login" (click)="login()" styleClass="p-button-primary">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Estudiante" [(visible)]="displayDialogLoginEst" position="top" [modal]="true"
+    [style]="{width: '29vw'}" [draggable]="false" [resizable]="false">
+    <div class="p-fluid p-2 pt-3">
+        <div *ngIf="loginAuthError" class="alert alert-warning" role="alert">
+            Matricula o contraseña inválido.
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" placeholder="Nombre de usuario" maxlength="8"
+                [(ngModel)]="adminLogin.administradorUsuario">
+            <label for="floatingInput">Matrícula</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
+                [(ngModel)]="adminLogin.administradorPassword">
+            <label for="floatingPassword">Contraseña</label>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="" label="Registrarse" [routerLink]="['estudiante/registro']"
+            (click)="displayDialogLoginEst = false" styleClass="p-button-warning">
+        </p-button>
+        <p-button icon="pi pi-times" label="Cerrar" (click)="displayDialogLoginEst = false"
+            styleClass="p-button-secondary">
+        </p-button>
+        <p-button icon="pi pi-user" label="Login" (click)="loginEstudiante()" styleClass="p-button-primary">
         </p-button>
     </ng-template>
 </p-dialog>

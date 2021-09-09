@@ -128,6 +128,7 @@ export class TalleresComponent implements OnInit {
         import("jspdf").then(jsPDF => {
             import("jspdf-autotable").then(x => {
                 const doc = new jsPDF.default(0, 0);
+                doc.text('Talleres', 100, 10);
                 doc.autoTable(this.exportColumns, this.talleresList);
                 doc.save('talleres.pdf');
             })
@@ -181,5 +182,20 @@ export class TalleresComponent implements OnInit {
 
     isAdmin() {
         return this.authService.isAdmin();
+    }
+
+    verificarEstado(fechaInicial: Date) {
+        let tempDate = new Date(fechaInicial);
+        // console.log(tempDate.getTime());
+        
+        let fechaActual = new Date();
+        let currentTimestamp: number = fechaActual.getTime();
+        let eventoTimestampInicial: number = tempDate.getTime();
+        
+        if (currentTimestamp > eventoTimestampInicial) {
+            return "finalizado";
+        }
+        
+        return "activo";
     }
 }

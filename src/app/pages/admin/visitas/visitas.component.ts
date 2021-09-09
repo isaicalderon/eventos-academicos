@@ -142,6 +142,7 @@ export class VisitasComponent implements OnInit {
         import("jspdf").then(jsPDF => {
             import("jspdf-autotable").then(x => {
                 const doc = new jsPDF.default(0, 0);
+                doc.text('Visitas', 100, 10)
                 doc.autoTable(this.exportColumns, this.visitasList);
                 doc.save('visitas.pdf');
             })
@@ -179,5 +180,20 @@ export class VisitasComponent implements OnInit {
 
     isAdmin() {
         return this.authService.isAdmin();
+    }
+
+    verificarEstado(fechaInicial: Date) {
+        let tempDate = new Date(fechaInicial);
+        // console.log(tempDate.getTime());
+        
+        let fechaActual = new Date();
+        let currentTimestamp: number = fechaActual.getTime();
+        let eventoTimestampInicial: number = tempDate.getTime();
+        
+        if (currentTimestamp > eventoTimestampInicial) {
+            return "finalizado";
+        }
+        
+        return "activo";
     }
 }

@@ -17,7 +17,16 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {
         // para redireccionar en caso de que entre al Home y tenga login
         if (this.verifyLogin()) {
-            this.router.navigate(['/admin/eventos']);
+
+            if (this.authService.isAdmin() || this.authService.isOperador()) {
+                this.router.navigate(['/admin/eventos']);
+                return;
+            }
+
+            if (this.authService.isEstudiante()) {
+                this.router.navigate(['/estudiante']);
+            }
+
         }
     }
 

@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { EventosService } from '../../../services/eventos.service';
 import { Eventos } from '../../../models/Eventos';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Moment } from "moment";
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../../services/auth.service';
+import { Visitas } from '../../../models/Visitas';
+import { Talleres } from '../../../models/Talleres';
+import { Conferencias } from '../../../models/Conferencias';
+import { PagosDto } from '../../../models/PagosDto';
+import { PagosService } from '../../../services/pagos.service';
 
 @Component({
     selector: 'app-eventosadmin',
@@ -18,25 +23,35 @@ export class EventosadminComponent implements OnInit {
     adminNav: boolean = false;
     displayCreateDialog: boolean = false;
     displayEditDialog: boolean = false;
+    displayDialogInfo: boolean = false;
+    displayDialogInscritos: boolean = false;
 
     eventosList: Eventos[];
     eventoNew: Eventos = new Eventos();
     eventoSeleccionado = new Eventos();
 
+    misVisitas: Visitas[];
+    misTalleres: Talleres[];
+    misConferencias: Conferencias[];
+    pagosList: PagosDto[];
+
+    contextMenu: MenuItem[];
+
     fecha1: Date;
     fecha2: Date;
 
     cols: any[];
-
+    colsInscritos: any[];
     exportColumns: any[];
-
+    exportColumnsInscritos: any[];
     es: any;
 
     constructor(
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private eventosService: EventosService,
-        private authService: AuthService
+        private authService: AuthService,
+        private pagosService: PagosService
     ) { }
 
     ngOnInit(): void {
@@ -51,7 +66,15 @@ export class EventosadminComponent implements OnInit {
             clear: 'Borrar'
         };
 
-        this.eventosService.obtenerEventos().then(res => this.eventosList = res);
+        this.eventosService.obtenerEventos().then(res => { this.eventosList = res; console.log(this.eventosList) });
+
+        this.contextMenu = [
+            { label: 'Editar', icon: 'pi pi-fw pi-pencil', command: () => this.fDisplayEditDialog(this.eventoSeleccionado) },
+            { label: 'Eliminar', icon: 'pi pi-fw pi-times', command: () => this.confirmDelete(this.eventoSeleccionado) },
+            { label: 'Ver Información', icon: 'pi pi-fw pi-eye', command: () => this.fDisplayDialogInfo(this.eventoSeleccionado) },
+            { label: 'Ver Inscritos', icon: 'pi pi-fw pi-user', command: () => this.fDisplayDialogInscritos() },
+            { label: 'Exportar Inscritos', icon: 'pi pi-fw pi-file-pdf', command: () => console.log('todo') }
+        ];
 
         this.cols = [
             { field: 'nombreevento', header: 'Nombre' },
@@ -62,6 +85,17 @@ export class EventosadminComponent implements OnInit {
         ];
 
         this.exportColumns = this.cols.map(col => ({ title: col.header, dataKey: col.field }));
+
+        this.colsInscritos = [
+            { field: 'nombreestudiantes', header: 'Nombre Estudiante' },
+            { field: 'descripcionpaquete', header: 'Descripción Paquete' },
+            { field: 'tipopaquetes', header: 'Tipo Paquete' },
+            { field: 'costopaquete', header: 'Costo Paquete' },
+            { field: 'fechapago', header: 'Fecha Pago' },
+            { field: 'estadopago', header: 'Estado Pago' },
+        ];
+
+        this.exportColumnsInscritos = this.colsInscritos.map(col => ({ title: col.header, dataKey: col.field }));
     }
 
     guardarEvento() {
@@ -129,6 +163,7 @@ export class EventosadminComponent implements OnInit {
         import("jspdf").then(jsPDF => {
             import("jspdf-autotable").then(x => {
                 const doc = new jsPDF.default(0, 0);
+                doc.text('Eventos', 100, 10);
                 doc.autoTable(this.exportColumns, this.eventosList);
                 doc.save('eventos.pdf');
             })
@@ -141,6 +176,26 @@ export class EventosadminComponent implements OnInit {
             const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
             const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
             this.saveAsExcelFile(excelBuffer, "eventos");
+        });
+    }
+
+    exportPdfInscritos() {
+        import("jspdf").then(jsPDF => {
+            import("jspdf-autotable").then(x => {
+                const doc = new jsPDF.default(0, 0);
+                doc.text('Inscritos', 100, 10);
+                doc.autoTable(this.exportColumnsInscritos, this.pagosList);
+                doc.save('Inscritos.pdf');
+            })
+        })
+    }
+
+    exportExcelInscritos() {
+        import("xlsx").then(xlsx => {
+            const worksheet = xlsx.utils.json_to_sheet(this.pagosList);
+            const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+            const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+            this.saveAsExcelFile(excelBuffer, "Inscritos");
         });
     }
 
@@ -197,7 +252,48 @@ export class EventosadminComponent implements OnInit {
         this.displayEditDialog = !this.displayEditDialog;
     }
 
+    fDisplayDialogInfo(evento): void {
+        this.eventoSeleccionado = evento;
+        this.eventosService.obtenerMisVisitas(this.eventoSeleccionado.ideventos).then(
+            res => {
+                this.misVisitas = res;
+                let visitas: string = "";
+                for (var i = 0; i < this.misVisitas.length; i++) {
+                    visitas += (i + 1) + ". " + this.misVisitas[i].visitanombre + ", \n";
+                }
+                this.eventoSeleccionado.visitas = visitas;
+            }
+        );
 
+        this.eventosService.obtenerMisTalleres(this.eventoSeleccionado.ideventos).then(
+            res => {
+                this.misTalleres = res;
+                let talleres: string = "";
+                for (var i = 0; i < this.misTalleres.length; i++) {
+                    talleres += (i + 1) + ". " + this.misTalleres[i].nombretalleres + ", \n";
+                }
+                this.eventoSeleccionado.talleres = talleres;
+            }
+        )
+
+        this.eventosService.obtenerMisConferencias(this.eventoSeleccionado.ideventos).then(
+            res => {
+                this.misConferencias = res;
+                let conferencias: string = "";
+                for (var i = 0; i < this.misConferencias.length; i++) {
+                    conferencias += (i + 1) + ". " + this.misConferencias[i].nombreconferencia + ", \n";
+                }
+                this.eventoSeleccionado.conferencias = conferencias;
+            }
+        )
+
+        this.displayDialogInfo = !this.displayDialogInfo;
+    }
+
+    fDisplayDialogInscritos() {
+        this.pagosService.obtenerPagosByIdEvento(this.eventoSeleccionado.ideventos).then(res=> this.pagosList = res);
+        this.displayDialogInscritos = !this.displayDialogInscritos;
+    }
 
     showMensaje(severity, summary, details) {
         this.messageService.add({ severity: severity, summary: summary, detail: details });
@@ -213,18 +309,15 @@ export class EventosadminComponent implements OnInit {
         let eventoTimestampInicial: number = parseInt(evento.fechainicioevento_ts);
         let eventoTimestampFinal: number = parseInt(evento.fechafinevento_ts);
 
-
         if (currentTimestamp < eventoTimestampFinal) {
             if (currentTimestamp > eventoTimestampInicial) {
                 return "iniciado";
-            }else{
+            } else {
                 // un calculo mas
             }
         } else {
             return "finalizado";
         }
-
-
 
         return "activo";
     }

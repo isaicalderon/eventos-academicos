@@ -90,6 +90,14 @@
                     <input id="correo" type="email" pInputText [(ngModel)]="estudianteNew.correoestudiantes">
                 </div>
                 <div class="p-field">
+                    <label for="">Contraseña</label>
+                    <div class="p-inputgroup">
+                        <input type="text" pInputText placeholder="" [(ngModel)]="estudianteNew.passwordestudiante">
+                        <button type="button" pButton pRipple label="Generar" icon="fa fa-random"
+                            styleClass="p-button-warn" (click)="generarPassword()"></button>
+                    </div>
+                </div>
+                <div class="p-field">
                     <label for="">Paquete</label>
                     <p-dropdown appendTo="body" [options]="paquetesList" [(ngModel)]="paqueteSeleccionado"
                         optionLabel="descripcionpaquete" placeholder="Selecciona un paquete">

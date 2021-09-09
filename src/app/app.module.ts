@@ -21,9 +21,15 @@ import { PaquetesComponent } from './pages/admin/paquetes/paquetes.component';
 import { TalleristasComponent } from './pages/admin/talleristas/talleristas.component';
 import { VisitasComponent } from './pages/admin/visitas/visitas.component';
 import { OperadorComponent } from './pages/admin/operador/operador.component';
+import { RegistroComponent } from './pages/estudiantes/registro/registro.component';
+import { PagosComponent } from './pages/estudiantes/pagos/pagos.component';
+import { DashboardComponent } from './pages/estudiantes/dashboard/dashboard.component';
+import { PagosadminComponent } from './pages/admin/pagosadmin/pagosadmin.component';
+
 
 //primeng
 import { AccordionModule } from 'primeng/accordion';     //accordion and accordion tab
+import {MenubarModule} from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
@@ -38,6 +44,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputMaskModule } from 'primeng/inputmask';
 import {InputSwitchModule} from 'primeng/inputswitch';
+import {PasswordModule} from 'primeng/password';
+import {SidebarModule} from 'primeng/sidebar';
+import {WebcamModule} from 'ngx-webcam';
+import {FileUploadModule} from 'primeng/fileupload';
+import {AutoCompleteModule} from 'primeng/autocomplete';
+import {ContextMenuModule} from 'primeng/contextmenu';
+
 
 @NgModule({
     declarations: [
@@ -53,7 +66,11 @@ import {InputSwitchModule} from 'primeng/inputswitch';
         PaquetesComponent,
         TalleristasComponent,
         VisitasComponent,
-        OperadorComponent
+        OperadorComponent,
+        RegistroComponent,
+        PagosComponent,
+        DashboardComponent,
+        PagosadminComponent
     ],
     imports: [
         BrowserModule,
@@ -62,7 +79,8 @@ import {InputSwitchModule} from 'primeng/inputswitch';
         AppRoutingModule,
         FormsModule,
         NgbModule,
-
+        
+        MenubarModule,
         AccordionModule,
         TableModule,
         DialogModule,
@@ -75,7 +93,14 @@ import {InputSwitchModule} from 'primeng/inputswitch';
         DropdownModule,
         InputNumberModule,
         InputMaskModule,
-        InputSwitchModule
+        InputSwitchModule,
+        PasswordModule,
+        WebcamModule,
+        FileUploadModule,
+        AutoCompleteModule,
+        ContextMenuModule,
+        SidebarModule
+        
     ],
     providers: [
         AuthService,

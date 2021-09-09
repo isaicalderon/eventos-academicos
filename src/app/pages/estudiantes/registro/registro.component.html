@@ -1,0 +1,93 @@
+<br>
+
+<div class="container" style="margin-bottom: 20px;">
+
+    <h1 class="text-center">Registro</h1>
+
+    <div class="p-fluid">
+        <!-- Nombre y apellidos -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Nombre(s)</label>
+                    <input type="text" pInputText [(ngModel)]="estudianteNew.nombreestudiantes">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Apellidos(s)</label>
+                    <input type="text" pInputText [(ngModel)]="estudianteNew.apellidosestudiante">
+                </div>
+            </div>
+        </div>
+
+        <!-- Matricula y correo -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Matrícula</label>
+                    <input type="text" pInputText maxlength="8" pattern="0-9"
+                        [(ngModel)]="estudianteNew.matriculaestudiantes">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Correo electrónico
+                    </label>
+                    <input type="text" pInputText [(ngModel)]="estudianteNew.correoestudiantes">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Contraseña</label>
+                    <p-password [(ngModel)]="estudianteNew.passwordestudiante" [toggleMask]="true"
+                        [promptLabel]="'Ingresa una contraseña'" [weakLabel]="'Nivel Bajo'"
+                        [mediumLabel]="'Nivel Intermedio'" [strongLabel]="'Nivel Alto'"></p-password>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Verificar Contraseña</label>
+                    <p-password [(ngModel)]="passwordRepeat" [toggleMask]="true" [feedback]="false"></p-password>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="row">
+            <div class="col-md-6">
+                <label for="">Paquete</label>
+                <p-dropdown appendTo="body" [options]="paquetesList" [(ngModel)]="paqueteSeleccionado"
+                    optionLabel="descripcionpaquete" placeholder="Selecciona un paquete">
+                </p-dropdown>
+            </div>
+        </div> -->
+
+    </div>
+    <br>
+    <h1 class="text-center">Gafete</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+                [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+                [videoOptions]="videoOptions" [imageQuality]="1" (cameraSwitched)="cameraWasSwitched($event)"
+                (initError)="handleInitError($event)"></webcam>
+        </div>
+        <div class="col-md-6">
+            <div class="snapshot" *ngIf="webcamImage">
+                <img [src]="webcamImage.imageAsDataUrl" />
+            </div>
+        </div>
+    </div>
+
+    <h4 *ngIf="errors.length > 0">Messages:</h4>
+    <ul *ngFor="let error of errors">
+        <li>{{error | json}}</li>
+    </ul>
+
+    <button pButton class="p-button-secondary" (click)="triggerSnapshot();">Tomar foto</button>
+    <button pButton class="p-button-primary" (click)="registrarEstudiante()">Registrarme</button>
+
+</div>

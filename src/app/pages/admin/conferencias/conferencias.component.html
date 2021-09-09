@@ -42,6 +42,9 @@
                 <th pSortableColumn="conferencistanombre"> Conferencista
                     <p-sortIcon field="conferencistanombre"></p-sortIcon>
                 </th>
+                <th>
+                    Estado
+                </th>
                 <th style="width: 120px;">Opciones</th>
             </tr>
         </ng-template>
@@ -56,6 +59,8 @@
                 <td>{{confe.conferencialugar}}</td>
                 <td>{{confe.nombreevento}}</td>
                 <td>{{confe.conferencistanombre}}</td>
+                <td><span [class]="'customer-badge status-'+verificarEstado(confe.fechainicioconferencia)">{{verificarEstado(confe.fechainicioconferencia)}}</span>
+                </td>
                 <td>
                     <button pButton class="p-button-rounded" icon="pi pi-pencil" [disabled]="!isAdmin()"
                         (click)="fDisplayDialogEdit(confe)"></button>

@@ -3,6 +3,7 @@ export class Paquetes {
     idpaquetes: number;
     costopaquete: string;
     descripcionpaquete: string;
+    contenidopaquete: string;
     tipopaquetes: string;
     pagospaquetes: string;
 

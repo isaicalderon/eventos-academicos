@@ -12,9 +12,10 @@ const header = {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-    _loginAdmin = "http://localhost:3000/api/login"
-    _loginOperador = "http://localhost:3000/api/loginOperador"
-
+    _loginAdmin = "http://localhost:3000/api/login";
+    _loginOperador = "http://localhost:3000/api/loginOperador";
+    _loginEstudiante = "http://localhost:3000/api/loginEstudiante";
+    
     constructor(
         private http: HttpClient,
         private router: Router
@@ -26,6 +27,10 @@ export class AuthService {
 
     loginOperador(admin: Admin) {
         return this.http.post(this._loginOperador, admin, header);
+    }
+
+    loginEstudiante(entity: Admin){
+        return this.http.post(this._loginEstudiante, entity, header);
     }
 
     loggedIn() {
@@ -41,6 +46,28 @@ export class AuthService {
         // console.log(isAdmin);
         
         if (isAdmin == 'true') {
+            return true;
+        }
+
+        return false;
+    }
+
+    isOperador() {
+        let isOperador = localStorage.getItem('isOperador');
+        // console.log(isAdmin);
+        
+        if (isOperador == 'true') {
+            return true;
+        }
+
+        return false;
+    }
+
+    isEstudiante() {
+        let isEstudiante = localStorage.getItem('isEstudiante');
+        // console.log(isAdmin);
+        
+        if (isEstudiante == 'true') {
             return true;
         }
 

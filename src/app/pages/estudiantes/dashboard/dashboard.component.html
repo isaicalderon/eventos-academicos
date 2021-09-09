@@ -1,0 +1,158 @@
+<div class="container" style="margin-top: 15px;margin-bottom: 30px;">
+
+    <div class="p-image">
+        <img class="img-perfil" src="/assets/img/noimage.jpg">
+    </div>
+    
+    <div class="p-fluid">
+        <!-- Nombre y apellidos -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Nombre(s)</label>
+                    <input type="text" pInputText [(ngModel)]="estudianteLogin.nombreestudiantes" disabled="true">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Apellidos(s)</label>
+                    <input type="text" pInputText [(ngModel)]="estudianteLogin.apellidosestudiante" disabled="true">
+                </div>
+            </div>
+        </div>
+
+        <!-- Matricula y correo -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Matrícula</label>
+                    <input type="text" pInputText maxlength="8" pattern="0-9"
+                        [(ngModel)]="estudianteLogin.matriculaestudiantes" disabled="true">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Correo electrónico
+                    </label>
+                    <input type="text" pInputText [(ngModel)]="estudianteLogin.correoestudiantes" disabled="true">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Contraseña</label>
+                    <p-password [(ngModel)]="estudianteLogin.passwordestudiante" [feedback]="false" [toggleMask]="true"
+                        disabled="true"></p-password>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <br>
+
+    <p-table [value]="misEventosList">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">Mis Eventos</h5>
+                <!-- <p-button icon="pi pi-refresh"></p-button> -->
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="nombreevento">Nombre <p-sortIcon field="nombreevento"></p-sortIcon>
+                </th>
+                <th style="width: 450px;" pSortableColumn="descripcionevento">Descripción <p-sortIcon
+                        field="descripcionevento">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="fechainicioevento">Fecha inicio <p-sortIcon field="fechainicioevento">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="fechafinEvento">Fecha final <p-sortIcon field="fechafinEvento"></p-sortIcon>
+                </th>
+                <th style="width: 120px;">Estado</th>
+                <th style="width: 120px;">Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="6">Sin registros</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-evento>
+            <tr>
+                <td>{{evento.nombreevento}}</td>
+                <td>{{evento.descripcionevento}}</td>
+                <td>{{formatDate(evento.fechainicioevento_ts)}}</td>
+                <td>{{formatDate(evento.fechafinevento_ts)}}</td>
+
+                <td>
+                    <span [class]="'customer-badge status-'+verificarEstado(evento)">{{verificarEstado(evento)}}</span>
+                </td>
+                <td>
+                    <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info"
+                        (click)="fDisplayDialogInfo(evento)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Información Paquete" [(visible)]="displayDialogInfo" [breakpoints]="{'960px': '75vw'}"
+    [style]="{width: '50vw'}" [baseZIndex]="10000" [modal]="true">
+
+    <div class="p-fluid p-2 pt-3">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Nombre Evento</label>
+                    <input type="text" pInputText [(ngModel)]="eventoSeleccionado.nombreevento" disabled="true">
+                </div>
+
+                <div class="p-field">
+                    <label for="">Paquete</label>
+                    <input type="text" pInputText [(ngModel)]="eventoSeleccionado.descripcionpaquete" disabled="true">
+                </div>
+
+                <div class="p-field">
+                    <label for="">Tipo Paquete</label>
+                    <input type="text" pInputText [(ngModel)]="eventoSeleccionado.tipopaquetes" disabled="true">
+                </div>
+
+                <div class="p-field">
+                    <label for="">Contenido Paquete</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="eventoSeleccionado.contenidopaquete" rows="5"
+                        disabled="true"></textarea>
+                </div>
+
+                <div class="p-field">
+                    <label for="">Costo Paquete</label>
+                    <input type="text" pInputText [(ngModel)]="eventoSeleccionado.costopaquete" disabled="true">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-field">
+                    <label for="">Visitas</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="eventoSeleccionado.visitas" rows="5"
+                        disabled="true"></textarea>
+                </div>
+                <div class="p-field">
+                    <label for="">Talleres</label>
+                    <textarea type="text" pInputTextarea [(ngModel)]="eventoSeleccionado.talleres" rows="5"
+                        disabled="true"></textarea>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <ng-template pTemplate="footer">
+        <p-button (click)="displayDialogInfo=false" label="Cerrar" styleClass="p-button-secondary"></p-button>
+    </ng-template>
+</p-dialog>

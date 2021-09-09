@@ -11,6 +11,10 @@ import { PaquetesComponent } from './pages/admin/paquetes/paquetes.component';
 import { TalleristasComponent } from './pages/admin/talleristas/talleristas.component';
 import { VisitasComponent } from './pages/admin/visitas/visitas.component';
 import { OperadorComponent } from './pages/admin/operador/operador.component';
+import { RegistroComponent } from './pages/estudiantes/registro/registro.component';
+import { PagosComponent } from './pages/estudiantes/pagos/pagos.component';
+import { DashboardComponent } from './pages/estudiantes/dashboard/dashboard.component';
+import { PagosadminComponent } from './pages/admin/pagosadmin/pagosadmin.component';
 
 const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -23,6 +27,12 @@ const routes: Routes = [
     { path: 'admin/paquetes', component: PaquetesComponent, canActivate: [AuthGuard] },
     { path: 'admin/visitas', component: VisitasComponent, canActivate: [AuthGuard] },
     { path: 'admin/operadores', component: OperadorComponent, canActivate: [AuthGuard] },
+    { path: 'admin/pagos', component: PagosadminComponent, canActivate: [AuthGuard] },
+
+    { path: 'estudiante/registro', component: RegistroComponent },
+    { path: 'estudiante', component: DashboardComponent, canActivate: [AuthGuard] },
+    { path: 'estudiante/dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+    { path: 'estudiante/pagos', component: PagosComponent, canActivate: [AuthGuard] },
 
     { path: '**', pathMatch: 'full', redirectTo: 'home' },
 ];

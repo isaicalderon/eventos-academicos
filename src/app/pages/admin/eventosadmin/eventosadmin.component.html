@@ -1,5 +1,7 @@
 <app-navbar-admin></app-navbar-admin>
+
 <p-toast></p-toast>
+<p-contextMenu #cm [model]="contextMenu"></p-contextMenu>
 
 <div class="container-fluid">
     <section class="p-3 my-container">
@@ -14,8 +16,9 @@
         </div>
 
         <!--tabla de contenido-->
-        <p-table #dt1 [value]="eventosList" dataKey="ideventos" styleClass="p-datatable-sm p-datatable-responsive-demo"
-            [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        <p-table #dt1 [value]="eventosList" [(contextMenuSelection)]="eventoSeleccionado" [contextMenu]="cm"
+            dataKey="ideventos" styleClass="p-datatable-sm p-datatable-responsive-demo" [paginator]="true" [rows]="10"
+            [showCurrentPageReport]="true"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
             [rowsPerPageOptions]="[10,25,50]"
             [globalFilterFields]="['nombreevento','descripcionevento','eventosmaxparticipantes','fechainicioevento','fechafinEvento']">
@@ -35,37 +38,48 @@
             <ng-template pTemplate="header">
                 <tr>
                     <!-- <th pSortableColumn="ideventos">Id <p-sortIcon field="ideventos"></p-sortIcon></th> -->
-                    <th pSortableColumn="nombreevento">Nombre <p-sortIcon field="nombreevento"></p-sortIcon>
+                    <th pSortableColumn="nombreevento">Nombre
+                        <p-sortIcon field="nombreevento"></p-sortIcon>
                     </th>
-                    <th style="width: 450px;" pSortableColumn="descripcionevento">Descripción <p-sortIcon
-                            field="descripcionevento">
-                        </p-sortIcon>
+                    <th style="width: 400px;" pSortableColumn="descripcionevento">Descripción
+                        <p-sortIcon field="descripcionevento"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="eventosmaxparticipantes">Máx. participantes <p-sortIcon
-                            field="eventosmaxparticipantes"></p-sortIcon>
+                    <th pSortableColumn="eventosmaxparticipantes">Máx. participantes
+                        <p-sortIcon field="eventosmaxparticipantes"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="fechainicioevento">Fecha inicio <p-sortIcon field="fechainicioevento">
-                        </p-sortIcon>
+                    <th pSortableColumn="pagocompletado">Estudiantes Inscritos
+                        <p-sortIcon field="pagocompletado"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="fechafinEvento">Fecha final <p-sortIcon field="fechafinEvento"></p-sortIcon>
+
+                    <th pSortableColumn="fechainicioevento">Fecha inicio
+                        <p-sortIcon field="fechainicioevento"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="fechafinEvento">Fecha final
+                        <p-sortIcon field="fechafinEvento"></p-sortIcon>
                     </th>
                     <th style="width: 120px;">Estado</th>
-                    <th style="width: 120px;">Opciones</th>
+                    <th style="width: auto;">Opciones</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-evento>
-                <tr>
+                <tr [pContextMenuRow]="evento">
                     <!-- <td>{{evento.ideventos}}</td> -->
                     <td>{{evento.nombreevento}}</td>
                     <td>{{evento.descripcionevento}}</td>
                     <td>{{evento.eventosmaxparticipantes}}</td>
+                    <td>{{evento.pagocompletado!=null?evento.pagocompletado:0}}</td>
                     <td>{{formatDate(evento.fechainicioevento_ts)}}</td>
                     <td>{{formatDate(evento.fechafinevento_ts)}}</td>
 
                     <td>
-                        <span [class]="'customer-badge status-'+verificarEstado(evento)">{{verificarEstado(evento)}}</span></td>
+                        <span
+                            [class]="'customer-badge status-'+verificarEstado(evento)">{{verificarEstado(evento)}}</span>
+                    </td>
 
                     <td>
+                        <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-primary"
+                            (click)="fDisplayDialogInfo(evento)"></button>
+
                         <button type="button" class="p-button-rounded p-button-info" pButton [disabled]="!isAdmin()"
                             (click)="fDisplayEditDialog(evento)" icon="pi pi-pencil">
                         </button>
@@ -158,7 +172,122 @@
             </p-button>
         </ng-template>
     </p-dialog>
+
+    <p-dialog header="Información Evento" [(visible)]="displayDialogInfo" [breakpoints]="{'960px': '75vw'}"
+        [style]="{width: '50vw'}" [baseZIndex]="10000" [modal]="true">
+
+        <div class="p-fluid p-2 pt-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="p-field">
+                        <label for="">Nombre Evento</label>
+                        <input type="text" pInputText [(ngModel)]="eventoSeleccionado.nombreevento" disabled="true">
+                    </div>
+
+                    <div class="p-field">
+                        <label for="">Visitas</label>
+                        <textarea type="text" pInputTextarea [(ngModel)]="eventoSeleccionado.visitas" rows="5"
+                            disabled="true"></textarea>
+                    </div>
+
+                    <div class="p-field">
+                        <label for="">Talleres</label>
+                        <textarea type="text" pInputTextarea [(ngModel)]="eventoSeleccionado.talleres" rows="5"
+                            disabled="true"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="p-field">
+                        <label for="">Talleres</label>
+                        <textarea type="text" pInputTextarea [(ngModel)]="eventoSeleccionado.conferencias" rows="5"
+                            disabled="true"></textarea>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <ng-template pTemplate="footer">
+            <p-button (click)="displayDialogInfo=false" label="Cerrar" styleClass="p-button-secondary"></p-button>
+        </ng-template>
+    </p-dialog>
+
+    <p-dialog header="Inscritos" [(visible)]="displayDialogInscritos" [breakpoints]="{'960px': '75vw'}"
+        [style]="{width: '80vw'}" [baseZIndex]="10000" [modal]="true">
+
+        <div class="p-fluid p-2 pt-3">
+            <p-table #dt2 [value]="pagosList" dataKey="idpagos" [paginator]="true" [rows]="10"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+                [rowsPerPageOptions]="[10,25,50]"
+                [globalFilterFields]="['nombreestudiantes','descripcionpaquete','tipopaquetes','costopaquete','nombreevento','fechapago','estadopago']">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex">
+                        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcelInscritos()"
+                            class="p-button-success p-mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+                        <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdfInscritos()"
+                            class="p-button-warning p-mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+                        <span class="p-input-icon-left p-ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Búsqueda general" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="nombreestudiantes">Estudiante
+                            <p-sortIcon field="nombreestudiantes"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="descripcionpaquete">Nombre Paquete
+                            <p-sortIcon field="descripcionpaquete"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="tipopaquetes">Tipo Paquete
+                            <p-sortIcon field="tipopaquetes"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="costopaquete">Costo Paquete
+                            <p-sortIcon field="costopaquete"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="fechapago">Fecha Pago
+                            <p-sortIcon field="fechapago"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="estadopago">Estado Pago
+                            <p-sortIcon field="estadopago"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="6">Sin registros</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-pagos>
+                    <tr>
+                        <td>{{pagos.nombreestudiantes+" "+pagos.apellidosestudiante+" - "+pagos.matriculaestudiantes}}
+                        </td>
+                        <td>{{pagos.descripcionpaquete}}</td>
+                        <td>{{pagos.tipopaquetes}}</td>
+                        <td style="text-align: right;">${{pagos.costopaquete}}.00</td>
+                        <td>{{formatDate(pagos.fechapago) }}</td>
+                        <td> <span [class]="'customer-badge '+pagos.estadopago">{{pagos.estadopago}}</span></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+
+        <ng-template pTemplate="footer">
+            <p-button (click)="displayDialogInscritos=false" label="Cerrar" styleClass="p-button-secondary"></p-button>
+        </ng-template>
+    </p-dialog>
+
 </div>
+
+
+
 
 <!-- Dialogo de confirmación -->
 <p-confirmDialog class="p-5" header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>

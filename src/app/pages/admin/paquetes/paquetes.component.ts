@@ -6,6 +6,10 @@ import { EventosService } from '../../../services/eventos.service';
 import { Eventos } from '../../../models/Eventos';
 import { AuthService } from '../../../services/auth.service';
 
+interface TipoPaquete {
+    nombre: string
+}
+
 @Component({
     selector: 'app-paquetes',
     templateUrl: './paquetes.component.html',
@@ -24,6 +28,9 @@ export class PaquetesComponent implements OnInit {
     eventosList: Eventos[];
     eventoSeleccionado: Eventos = new Eventos();
 
+    paquetes: TipoPaquete[];
+    paqueteSelected: TipoPaquete;
+
     cols: any[];
     exportColumns: any[];
 
@@ -33,7 +40,13 @@ export class PaquetesComponent implements OnInit {
         private paquetesService: PaquetesService,
         private eventosService: EventosService,
         private authService: AuthService
-    ) { }
+    ) {
+        this.paquetes = [
+            {nombre: 'Premium'},
+            {nombre: 'Medio'},
+            {nombre: 'Básico'},
+        ]
+    }
 
     ngOnInit(): void {
         this.paquetesService.obtenerTodo().then(res => this.paquetesList = res);
@@ -46,12 +59,15 @@ export class PaquetesComponent implements OnInit {
             { field: 'nombreevento', header: 'Evento' }
         ];
 
+
+
         this.exportColumns = this.cols.map(col => ({ title: col.header, dataKey: col.field }));
     }
 
     guardarPaquete() {
         try {
             this.paqueteNew.idevento = this.eventoSeleccionado.ideventos;
+            this.paqueteNew.tipopaquetes = this.paqueteSelected.nombre;
 
             this.paquetesService.guardar(this.paqueteNew).subscribe(
                 res => {
@@ -72,7 +88,8 @@ export class PaquetesComponent implements OnInit {
     editarPaquete() {
         try {
             this.paqueteSeleccionado.idevento = this.eventoSeleccionado.ideventos;
-
+            this.paqueteSeleccionado.tipopaquetes = this.paqueteSelected.nombre;
+            
             this.paquetesService.editar(this.paqueteSeleccionado).subscribe(
                 res => {
                     this.showMensaje('info', 'Mensaje', 'Se editó correctamente');
@@ -90,19 +107,30 @@ export class PaquetesComponent implements OnInit {
     }
 
     confirmDelete(paquete: Paquetes) {
-        this.confirmationService.confirm({
-            message: `Los datos no podrán ser restaurados ¿Desea eliminar el paquete: ${paquete.descripcionpaquete} ?`,
-            acceptLabel: 'Sí',
-            acceptButtonStyleClass: 'p-button-primary',
-            rejectButtonStyleClass: 'p-button-secondary',
-            defaultFocus: 'reject',
-            accept: () => {
-                this.paquetesService.eliminar(paquete.idpaquetes).subscribe(res => {
-                    this.showMensaje('success', 'Mensaje', 'Se eliminó correctamente.');
-                    this.paquetesService.obtenerTodo().then(res => this.paquetesList = res);
-                });
-            }
-        });
+        try {
+
+
+            this.confirmationService.confirm({
+                message: `Los datos no podrán ser restaurados ¿Desea eliminar el paquete: ${paquete.descripcionpaquete} ?`,
+                acceptLabel: 'Sí',
+                acceptButtonStyleClass: 'p-button-primary',
+                rejectButtonStyleClass: 'p-button-secondary',
+                defaultFocus: 'reject',
+                accept: () => {
+                    this.paquetesService.eliminar(paquete.idpaquetes).subscribe(
+                        res => {
+                            this.showMensaje('success', 'Mensaje', 'Se eliminó correctamente.');
+                            this.paquetesService.obtenerTodo().then(res => this.paquetesList = res);
+                        },
+                        err => {
+                            this.showMensaje('error', 'Mensaje', 'No se pudo borrar el paquete, fallo de conexión o clave foranea activa');
+                        }
+                    );
+                }
+            });
+        } catch (error) {
+            this.showMensaje('warn', 'Mensaje', 'No se pudo borrar el paquete, fallo de conexión o clave foranea activa');
+        }
     }
 
     fDisplayDialogAdd() {
@@ -147,7 +175,7 @@ export class PaquetesComponent implements OnInit {
     showMensaje(severity, summary, details) {
         this.messageService.add({ severity: severity, summary: summary, detail: details });
     }
-    
+
     isAdmin() {
         return this.authService.isAdmin();
     }

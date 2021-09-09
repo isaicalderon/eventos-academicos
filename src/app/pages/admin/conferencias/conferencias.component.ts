@@ -127,4 +127,19 @@ export class ConferenciasComponent implements OnInit {
     isAdmin() {
         return this.authService.isAdmin();
     }
+
+    verificarEstado(fechaInicial: Date) {
+        let tempDate = new Date(fechaInicial);
+        // console.log(tempDate.getTime());
+        
+        let fechaActual = new Date();
+        let currentTimestamp: number = fechaActual.getTime();
+        let eventoTimestampInicial: number = tempDate.getTime();
+        
+        if (currentTimestamp > eventoTimestampInicial) {
+            return "finalizado";
+        }
+        
+        return "activo";
+    }
 }
